@@ -6,13 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.annotations.FailingTest;
 import com.example.annotations.FlakyTest;
-import com.example.annotations.FrameworkAnnotaions;
 import com.example.annotations.SmokeTest;
 import com.example.config.TestConfig;
 import com.typesafe.config.Config;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -96,24 +93,5 @@ public class TestSandBox {
     WebDriver driver = new ChromeDriver(options);
     driver.get("https://www.google.com");
     driver.quit();
-  }
-
-  @Test
-  @FrameworkAnnotaions(Author = "Ravi")
-  @SneakyThrows
-  void shouldTriggerPreCommitHookForFormatting() {
-    // Arrange: Intentionally introduce a formatting issue (trailing whitespace, incorrect
-    // indentation, etc.)
-    String faultyCode =
-        "public class Test { \n    public static void main(String[] args) {  }\n    }  ";
-
-    // This is just for simulating a case where formatting will fail
-    // You would manually commit this file after running the test
-
-    // Act: Commit changes and run pre-commit hooks outside the test
-    // (This can be done manually via the pre-commit CLI tool)
-
-    // After committing, check if pre-commit hooks (such as formatting) were applied and fixed
-    assertThat(faultyCode.trim()).as("Ensure formatting works").isEqualTo(faultyCode.trim());
   }
 }
