@@ -1,24 +1,25 @@
 package com.example.driver.manager.remote.seleniumgrid;
 
+import static com.example.utils.ConfigUtil.CONFIG;
+
 import com.example.enums.Browser;
+import java.net.URI;
+import java.net.URL;
 import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import static com.example.utils.ConfigUtil.CONFIG;
-import java.net.URL;
 
 public final class SeleniumGridChromeManager {
 
-  private SeleniumGridChromeManager() {
-  }
+  private SeleniumGridChromeManager() {}
 
   @SneakyThrows
   public static WebDriver getDriver() {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setBrowserName(String.valueOf(Browser.CHROME));
 
-    URL seleniumGridURL = new URL(CONFIG.getString("seleniumGridURL"));
+    URL seleniumGridURL = URI.create(CONFIG.getString("seleniumGridURL")).toURL();
     return new RemoteWebDriver(seleniumGridURL, capabilities);
   }
 }

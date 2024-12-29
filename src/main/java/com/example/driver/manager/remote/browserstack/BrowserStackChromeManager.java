@@ -1,16 +1,17 @@
 package com.example.driver.manager.remote.browserstack;
 
 import static com.example.utils.ConfigUtil.CONFIG;
+
+import java.net.URI;
 import java.net.URL;
+import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import lombok.SneakyThrows;
 
 public final class BrowserStackChromeManager {
 
-  private BrowserStackChromeManager() {
-  }
+  private BrowserStackChromeManager() {}
 
   @SneakyThrows
   public static WebDriver getDriver() {
@@ -21,7 +22,7 @@ public final class BrowserStackChromeManager {
     capabilities.setCapability("os", "Windows");
     capabilities.setCapability("os_version", "10");
 
-    URL browserStackUrl = new URL(CONFIG.getString("browserStackURL"));
+    URL browserStackUrl = URI.create(CONFIG.getString("browserStackURL")).toURL();
     return new RemoteWebDriver(browserStackUrl, capabilities);
   }
 }
