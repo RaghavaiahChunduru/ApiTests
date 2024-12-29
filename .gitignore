@@ -5,7 +5,7 @@
 notes.txt
 
 # Ignore target
-target
+target/
 
 # Ignore git crypt key (in a real production world scenario).
 # I am not ingoring it here since its an open source project and anyone who wants to clone the project would need this
@@ -24,7 +24,6 @@ target
 
 # Ignore folders
 .vscode/
-target/
 
 # Ignore specific files
 .editorconfig

@@ -19,14 +19,13 @@ public final class ExtentReport {
             extentreports = new ExtentReports();
             ExtentSparkReporter spark = new ExtentSparkReporter(getReportPath());
 
-            // after changing extent to latest version uncomment below
-            // // Load configuration from JSON file
+            //after changing extent to latest version uncomment below
+            // Load configuration from JSON file
             // File configJson = new File("extent_config.json");
             // try {
             // spark.loadJSONConfig(configJson);
             // } catch (IOException e) {
-            // throw new RuntimeException("Failed to load Extent Report configuration from
-            // JSON file", e);
+            // throw new RuntimeException("Failed to load Extent Report configuration from JSON file", e);
 
             // }
             extentreports.attachReporter(spark);
