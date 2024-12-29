@@ -1,0 +1,5 @@
+# Uncomment the following line to enable git-crypt (if you wish to encrypt secrets)
+# secrets.conf filter=git-crypt diff=git-crypt
+
+# Prevent encrypting .gitattributes file :
+.gitattributes !filter !diff

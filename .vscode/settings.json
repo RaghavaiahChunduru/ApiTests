@@ -1,0 +1,7 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "maven.view": "flat",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.dependency.packagePresentation": "flat",
+    "java.debug.settings.onBuildFailureProceed": true
+}

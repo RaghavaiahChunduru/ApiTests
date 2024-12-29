@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%p] %d{ISO8601} %c{1}: %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- Suppress INFO logs from JUnit platform launcher -->
+        <Logger name="org.junit.platform.launcher" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Suppress logs from MongoDB driver -->
+        <Logger name="org.mongodb.driver" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Suppress Selenium remote logs -->
+        <Logger name="org.openqa.selenium.remote" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Root Logger -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
