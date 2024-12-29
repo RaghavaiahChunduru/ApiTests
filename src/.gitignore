@@ -21,3 +21,14 @@ target
 
 # Ignore secrets file
 **/http-client.private.env.json
+
+# Ignore the .vscode folder
+.vscode/
+
+# Ignore specific files
+.editorconfig
+index.html
+pre-commit-config.yaml
+
+# Optional: Ignore .gitattributes if you don't need it
+.gitattributes
