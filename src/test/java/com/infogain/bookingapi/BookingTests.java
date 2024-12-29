@@ -1,4 +1,4 @@
-package com.infogain.api.booking;
+package com.infogain.bookingapi;
 
 import static com.infogain.api.auth.Scope.ADMIN;
 import static com.infogain.api.auth.Scope.GUEST;
@@ -6,6 +6,8 @@ import static org.apache.http.HttpStatus.*;
 
 import com.infogain.annotations.FailingTest;
 import com.infogain.annotations.RegressionTest;
+import com.infogain.api.booking.Booking;
+import com.infogain.api.booking.BookingAPI;
 import com.infogain.report.ExtentLogger;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;

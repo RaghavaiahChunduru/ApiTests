@@ -1,5 +1,7 @@
-package com.infogain.api.booking;
+package com.infogain.bookingapi;
 
+import com.infogain.api.booking.Booking;
+import com.infogain.api.booking.BookingResponse;
 import com.infogain.asserts.VerifyResponse;
 import io.restassured.response.Response;
 
