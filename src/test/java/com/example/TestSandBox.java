@@ -46,7 +46,7 @@ public class TestSandBox {
 
   @SmokeTest
   void assertThatTrueIsTrue() {
-    assertTrue(true, "true is true");
+    assertTrue(true, "true is true ");
   }
 
   @FailingTest
