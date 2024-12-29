@@ -1,4 +1,4 @@
-package com.infogain;
+package com.infogain.practice;
 
 import static com.infogain.factories.TestDataFactory.createRandomStudent;
 import static com.infogain.utils.ConfigUtil.CONFIG;
