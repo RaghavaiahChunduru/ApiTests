@@ -1,4 +1,4 @@
-package com.infogain.bookingapi;
+package com.infogain.usermanagementapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @HealthCheckTest
-class BookingApiHealthCheckTests {
+class UserManagementHealthCheckTests {
   @Test
-  void assertThatRestfulBookerApplicationIsUpAndHealthy() {
+  void assertThatUserManagementServiceIsUpAndHealthy() {
     Response response = HealthCheckAPI.healthCheck();
     ExtentLogger.logResponse(response);
-    assertEquals(201, response.getStatusCode());
+    assertEquals(200, response.getStatusCode());
   }
 }

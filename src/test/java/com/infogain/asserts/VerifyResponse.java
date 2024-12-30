@@ -4,6 +4,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -21,6 +22,12 @@ public abstract class VerifyResponse<SELF_TYPE extends VerifyResponse<?>> {
 
   public SELF_TYPE statusCodeIs(int statusCode) {
     Assertions.assertThat(response.getStatusCode()).describedAs("statusCode").isEqualTo(statusCode);
+
+    return selfType;
+  }
+
+  public SELF_TYPE responseTimeBelow(int timeInMilliSeconds) {
+    Assertions.assertThat(response.timeIn(TimeUnit.MILLISECONDS)).describedAs("response").isEqualTo(timeInMilliSeconds);
 
     return selfType;
   }

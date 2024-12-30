@@ -1,33 +1,31 @@
-package com.infogain.api.booking;
+package com.infogain.api.usermanagement;
 
 import static com.infogain.utils.ConfigUtil.CONFIG;
 import static io.restassured.RestAssured.given;
 
-import com.infogain.api.auth.Scope;
 import com.infogain.api.basespec.SpecFactory;
 import com.infogain.report.ExtentLogger;
 import com.infogain.utils.JsonUtil;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class BookingAPI {
-  private Scope scope;
+public final class UserManagementAPI {
 
-  private BookingAPI(Scope scope) {
-    this.scope = scope;
+  private UserManagementAPI() {
   }
 
-  public static BookingAPI useAs(Scope scope) {
-    return new BookingAPI(scope);
+  public static UserManagementAPI getInstance() {
+    return new UserManagementAPI();
   }
 
-  public Response newBooking(Booking booking) {
-    String endpoint = CONFIG.getString("BOOKING_ENDPOINT");
-    RequestSpecification requestSpec = SpecFactory.getSpecFor(scope);
+  public Response newUser(User user) {
+
+    String endpoint = CONFIG.getString("USER_ENDPOINT");
+    RequestSpecification requestSpec = SpecFactory.getSpec();
 
     return given()
         .spec(requestSpec)
-        .body(booking)
+        .body(user)
         .log()
         .ifValidationFails()
         .when()
@@ -39,11 +37,11 @@ public class BookingAPI {
         .response();
   }
 
-  public Response getBooking(Long bookingId) {
-    String endpoint = CONFIG.getString("BOOKING_ID_ENDPOINT");
+  public Response getUser(Long userId) {
+    String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
     String fullUrl = CONFIG.getString("BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpecFor(scope);
+    RequestSpecification requestSpec = SpecFactory.getSpec();
 
     ExtentLogger.logRequest(requestSpec, fullUrl);
 
@@ -52,7 +50,7 @@ public class BookingAPI {
         .log()
         .ifValidationFails()
         .when()
-        .get(endpoint, bookingId)
+        .get(endpoint, userId)
         .then()
         .log()
         .ifError()
@@ -60,23 +58,23 @@ public class BookingAPI {
         .response();
   }
 
-  public Response updateBooking(Booking booking, Long bookingId) {
-    String endpoint = CONFIG.getString("BOOKING_ID_ENDPOINT");
+  public Response updateUser(User user, Long userId) {
+    String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
     String fullUrl = CONFIG.getString("BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpecFor(scope);
+    RequestSpecification requestSpec = SpecFactory.getSpec();
 
-    String requestBody = JsonUtil.serialize(booking);
+    String requestBody = JsonUtil.serialize(user);
 
     ExtentLogger.logRequest(requestSpec, fullUrl, requestBody);
 
     return given()
         .spec(requestSpec)
-        .body(booking)
+        .body(user)
         .log()
         .ifValidationFails()
         .when()
-        .put(endpoint, bookingId)
+        .put(endpoint, userId)
         .then()
         .log()
         .ifError()
@@ -84,23 +82,23 @@ public class BookingAPI {
         .response();
   }
 
-  public Response patchBooking(Booking booking, Long bookingId) {
-    String endpoint = CONFIG.getString("BOOKING_ID_ENDPOINT");
+  public Response patchUser(User user, Long userId) {
+    String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
     String fullUrl = CONFIG.getString("BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpecFor(scope);
+    RequestSpecification requestSpec = SpecFactory.getSpec();
 
-    String requestBody = JsonUtil.serialize(booking);
+    String requestBody = JsonUtil.serialize(user);
 
     ExtentLogger.logRequest(requestSpec, fullUrl, requestBody);
 
     return given()
         .spec(requestSpec)
-        .body(booking)
+        .body(user)
         .log()
         .ifValidationFails()
         .when()
-        .patch(endpoint, bookingId)
+        .patch(endpoint, userId)
         .then()
         .log()
         .ifError()
@@ -108,16 +106,16 @@ public class BookingAPI {
         .response();
   }
 
-  public Response deleteBooking(Long bookingId) {
-    String endpoint = CONFIG.getString("BOOKING_ID_ENDPOINT");
-    RequestSpecification requestSpec = SpecFactory.getSpecFor(scope);
+  public Response deleteUser(Long userId) {
+    String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
+    RequestSpecification requestSpec = SpecFactory.getSpec();
 
     return given()
         .spec(requestSpec)
         .log()
         .ifValidationFails()
         .when()
-        .delete(endpoint, bookingId)
+        .delete(endpoint, userId)
         .then()
         .log()
         .ifError()

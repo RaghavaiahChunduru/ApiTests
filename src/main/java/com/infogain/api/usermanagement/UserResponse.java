@@ -1,11 +1,11 @@
-package com.infogain.api.booking;
+package com.infogain.api.usermanagement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class BookingResponse {
-  private long bookingid;
-  private Booking booking;
+public class UserResponse {
+  private long userId;
+  private User user;
 }
