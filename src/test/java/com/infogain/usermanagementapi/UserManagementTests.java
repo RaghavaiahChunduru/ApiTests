@@ -17,7 +17,8 @@ import org.junit.jupiter.api.Test;
 @RegressionTest
 public class UserManagementTests {
 
-  public static final String READ_UPDATE_USER_SCHEMA_FILE_PATH = "schemas/read-update-user-schema.json";
+  public static final String READ_UPDATE_USER_SCHEMA_FILE_PATH =
+      "schemas/read-update-user-schema.json";
   public static final String CREATE_USER_SCHEMA_FILE_PATH = "schemas/create-user-schema.json";
 
   private ThreadLocal<Long> userId = new ThreadLocal<>();
@@ -116,16 +117,19 @@ public class UserManagementTests {
   @Test
   void assertThatAdminCanPartiallyUpdateAnExistingUser() {
     // Arrange
-    User partiallyUpdatedUser = User.builder().setEmail("updatedemail@gmail.com").setPhone("1122334455").build();
+    User partiallyUpdatedUser =
+        User.builder().setEmail("updatedemail@gmail.com").setPhone("1122334455").build();
 
     // Act
-    Response response = UserManagementAPI.getInstance().patchUser(partiallyUpdatedUser, userId.get());
+    Response response =
+        UserManagementAPI.getInstance().patchUser(partiallyUpdatedUser, userId.get());
     ExtentLogger.logResponse(response);
 
     // Assert API Response
-    User expectedUser = user.get()
-        .setEmail(partiallyUpdatedUser.getEmail())
-        .setPhone(partiallyUpdatedUser.getPhone());
+    User expectedUser =
+        user.get()
+            .setEmail(partiallyUpdatedUser.getEmail())
+            .setPhone(partiallyUpdatedUser.getPhone());
 
     VerifyUserResponse.assertThat(response)
         .statusCodeIs(SC_OK)
