@@ -27,7 +27,9 @@ public abstract class VerifyResponse<SELF_TYPE extends VerifyResponse<?>> {
   }
 
   public SELF_TYPE responseTimeBelow(int timeInMilliSeconds) {
-    Assertions.assertThat(response.timeIn(TimeUnit.MILLISECONDS)).describedAs("response").isEqualTo(timeInMilliSeconds);
+    Assertions.assertThat(response.timeIn(TimeUnit.MILLISECONDS))
+        .describedAs("response")
+        .isEqualTo(timeInMilliSeconds);
 
     return selfType;
   }

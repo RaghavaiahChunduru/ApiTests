@@ -24,5 +24,3 @@ pre-commit-config.yaml
 
 # Optional: Ignore .gitattributes if you don't need it
 .gitattributes
-
-

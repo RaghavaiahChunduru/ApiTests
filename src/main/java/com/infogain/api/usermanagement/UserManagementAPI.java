@@ -11,8 +11,7 @@ import io.restassured.specification.RequestSpecification;
 
 public final class UserManagementAPI {
 
-  private UserManagementAPI() {
-  }
+  private UserManagementAPI() {}
 
   public static UserManagementAPI getInstance() {
     return new UserManagementAPI();

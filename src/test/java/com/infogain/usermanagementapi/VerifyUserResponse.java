@@ -18,10 +18,7 @@ public class VerifyUserResponse extends VerifyResponse<VerifyUserResponse> {
   public VerifyUserResponse postHasUser(User expectedUser) {
     UserResponse userResponse = response.then().extract().response().as(UserResponse.class);
 
-    softAssertions
-        .assertThat(userResponse.getUser())
-        .describedAs("user")
-        .isEqualTo(expectedUser);
+    softAssertions.assertThat(userResponse.getUser()).describedAs("user").isEqualTo(expectedUser);
 
     return this;
   }
@@ -29,10 +26,7 @@ public class VerifyUserResponse extends VerifyResponse<VerifyUserResponse> {
   public VerifyUserResponse hasUser(User expectedUser) {
     User userResponse = response.then().extract().response().as(User.class);
 
-    softAssertions
-        .assertThat(userResponse)
-        .describedAs("user")
-        .isEqualTo(expectedUser);
+    softAssertions.assertThat(userResponse).describedAs("user").isEqualTo(expectedUser);
 
     return this;
   }
