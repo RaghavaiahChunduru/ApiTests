@@ -1,20 +1,22 @@
 package com.infogain.asserts;
 
+import static com.infogain.extensions.HikariCPExtension.getDataSource;
 import static com.infogain.utils.ConfigUtil.CONFIG;
 
 import com.infogain.api.usermanagement.User;
-import com.machinezoo.noexception.Exceptions;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.awaitility.Awaitility;
 
 @Slf4j
 public final class ValidateDB {
 
-  private ValidateDB() {}
+  private ValidateDB() {
+  }
 
   private static final ValidateDB instance = new ValidateDB();
 
@@ -22,88 +24,97 @@ public final class ValidateDB {
     return instance;
   }
 
-  private Connection connection;
-
-  private static final String DB_URL = CONFIG.getString("DB_URL");
-  private static final String DB_USERNAME = CONFIG.getString("DB_USERNAME");
-  private static final String DB_PASSWORD = CONFIG.getString("DB_PASSWORD");
-
-  public ValidateDB connectToDatabase() {
-    Exceptions.wrap(
-            e -> new RuntimeException("Failed to establish a connection to the database", e))
-        .run(
-            () -> {
-              connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-              log.info("Successfully connected to the database.");
-            });
-    return this;
-  }
+  private static final int AWAITILITY_TIMEOUT = CONFIG.getInt("AWAITILITY_TIMEOUT_IN_SECONDS");
+  private static final int AWAITILITY_POLL_INTERVAL = CONFIG.getInt("AWAITILITY_POLL_INTERVAL_IN_SECONDS");
+  private static final int AWAITILITY_POLL_DELAY = CONFIG.getInt("AWAITILITY_POLL_DELAY_IN_SECONDS");
 
   public ValidateDB validateUserInDatabase(User expectedUser, Long userId) {
     String query = "SELECT * FROM user WHERE id = ?";
     validateNonNullAndNonEmpty(userId, "User ID");
 
-    Exceptions.wrap(e -> new RuntimeException("Failed to validate user in the database", e))
-        .run(
-            () -> {
-              try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setLong(1, userId);
+    Awaitility.await()
+        .atMost(AWAITILITY_TIMEOUT, TimeUnit.SECONDS)
+        .pollInterval(AWAITILITY_POLL_INTERVAL, TimeUnit.SECONDS)
+        .pollDelay(AWAITILITY_POLL_DELAY, TimeUnit.SECONDS)
+        .untilAsserted(() -> {
+          try (Connection connection = getDataSource().getConnection();
+              PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, userId);
 
-                try (ResultSet resultSet = statement.executeQuery()) {
-                  if (resultSet.next()) {
-                    Assertions.assertThat(resultSet.getLong("id")).isEqualTo(userId);
-                    Assertions.assertThat(resultSet.getString("username"))
-                        .isEqualTo(expectedUser.getUserName());
-                    Assertions.assertThat(resultSet.getString("email"))
-                        .isEqualTo(expectedUser.getEmail());
-                    Assertions.assertThat(resultSet.getString("phone"))
-                        .isEqualTo(expectedUser.getPhone());
-                    Assertions.assertThat(resultSet.getInt("role_id"))
-                        .isEqualTo(expectedUser.getRoleId());
-
-                    log.info("User validation successful for userId: {}", userId);
-                  } else {
-                    throw new RuntimeException("No user found in the database with id: " + userId);
-                  }
-                }
+            try (ResultSet resultSet = statement.executeQuery()) {
+              if (resultSet.next()) {
+                validateResultSet(resultSet, expectedUser, userId);
+                log.info("User validation successful for userId: {}", userId);
+              } else {
+                throw new RuntimeException("No user found in the database with id: " + userId);
               }
-            });
+            }
+          } catch (Exception e) {
+            throw new RuntimeException("Failed to validate user in the database", e);
+          }
+        });
+
     return this;
+  }
+
+  private void validateResultSet(ResultSet resultSet, User expectedUser, Long userId) {
+    Assertions.assertThat(resultSet)
+        .as("Validating user details in the database for userId: %d", userId)
+        .satisfies(rs -> {
+          Assertions.assertThat(rs.getLong("id"))
+              .as("User ID mismatch")
+              .withFailMessage("Expected ID '%d', but found '%d'", userId, rs.getLong("id"))
+              .isEqualTo(userId);
+
+          Assertions.assertThat(rs.getString("username"))
+              .as("Username mismatch")
+              .withFailMessage("Expected username '%s', but found '%s'", expectedUser.getUserName(),
+                  rs.getString("username"))
+              .isEqualTo(expectedUser.getUserName());
+
+          Assertions.assertThat(rs.getString("email"))
+              .as("Email mismatch")
+              .withFailMessage("Expected email '%s', but found '%s'", expectedUser.getEmail(), rs.getString("email"))
+              .isEqualTo(expectedUser.getEmail());
+
+          Assertions.assertThat(rs.getString("phone"))
+              .as("Phone number mismatch")
+              .withFailMessage("Expected phone '%s', but found '%s'", expectedUser.getPhone(), rs.getString("phone"))
+              .isEqualTo(expectedUser.getPhone());
+
+          Assertions.assertThat(rs.getInt("role_id"))
+              .as("Role ID mismatch")
+              .withFailMessage("Expected role ID '%d', but found '%d'", expectedUser.getRoleId(), rs.getInt("role_id"))
+              .isEqualTo(expectedUser.getRoleId());
+        });
   }
 
   public ValidateDB validateUserNotInDatabase(Long userId) {
     validateNonNullAndNonEmpty(userId, "User ID");
 
     String query = "SELECT * FROM user WHERE id = ?";
-    Exceptions.wrap(
-            e -> new RuntimeException("Failed to validate absence of user in the database", e))
-        .run(
-            () -> {
-              try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setLong(1, userId);
+    Awaitility.await()
+        .atMost(AWAITILITY_TIMEOUT, TimeUnit.SECONDS)
+        .pollInterval(AWAITILITY_POLL_INTERVAL, TimeUnit.SECONDS)
+        .pollDelay(AWAITILITY_POLL_DELAY, TimeUnit.SECONDS)
+        .untilAsserted(() -> {
+          try (Connection connection = getDataSource().getConnection();
+              PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, userId);
 
-                try (ResultSet resultSet = statement.executeQuery()) {
-                  if (resultSet.next()) {
-                    throw new RuntimeException(
-                        "User with id " + userId + " still exists in the database.");
-                  } else {
-                    log.info("User with id {} is successfully deleted from the database.", userId);
-                  }
-                }
+            try (ResultSet resultSet = statement.executeQuery()) {
+              if (resultSet.next()) {
+                throw new RuntimeException("User with id " + userId + " still exists in the database.");
+              } else {
+                log.info("User with id {} is successfully deleted from the database.", userId);
               }
-            });
+            }
+          } catch (Exception e) {
+            throw new RuntimeException("Failed to validate absence of user in the database", e);
+          }
+        });
+
     return this;
-  }
-
-  public void closeConnection() {
-    Exceptions.wrap(e -> new RuntimeException("Failed to close the database connection", e))
-        .run(
-            () -> {
-              if (connection != null) {
-                connection.close();
-                log.info("Database connection closed successfully.");
-              }
-            });
   }
 
   private void validateNonNullAndNonEmpty(Object value, String fieldName) {

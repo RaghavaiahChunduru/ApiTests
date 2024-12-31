@@ -22,63 +22,72 @@
     <noexception.version>1.9.1</noexception.version>
     <javafaker.version>1.0.2</javafaker.version>
     <extentreport.version>5.1.2</extentreport.version>
+    <awaitality.version>4.2.2</awaitality.version>
+    <hikaricp.version>6.2.1</hikaricp.version>
     <maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
   </properties>
 
-<dependencyManagement>
-  <!-- Centralized version control for conflicting dependencies -->
-  <dependencies>
-    <!-- Commons Lang -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.14.0</version>
-    </dependency>
+  <dependencyManagement>
+    <!-- Centralized version control for conflicting dependencies -->
+    <dependencies>
+      <!-- Commons Lang -->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.14.0</version>
+      </dependency>
 
-    <!-- Google Guava -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>33.3.1-jre</version>
-    </dependency>
+      <!-- Google Guava -->
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>33.3.1-jre</version>
+      </dependency>
 
-    <!-- Byte Buddy -->
-    <dependency>
-      <groupId>net.bytebuddy</groupId>
-      <artifactId>byte-buddy</artifactId>
-      <version>1.15.11</version>
-    </dependency>
+      <!-- Byte Buddy -->
+      <dependency>
+        <groupId>net.bytebuddy</groupId>
+        <artifactId>byte-buddy</artifactId>
+        <version>1.15.11</version>
+      </dependency>
 
-    <!-- SLF4J API -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>2.0.11</version>
-    </dependency>
+      <!-- SLF4J API -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>2.0.11</version>
+      </dependency>
 
-    <!-- Jackson Databind -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.18.2</version>
-    </dependency>
+      <!-- Jackson Databind -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.18.2</version>
+      </dependency>
 
-    <!-- JSR305 -->
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>3.0.2</version>
-    </dependency>
+      <!-- JSR305 -->
+      <dependency>
+        <groupId>com.google.code.findbugs</groupId>
+        <artifactId>jsr305</artifactId>
+        <version>3.0.2</version>
+      </dependency>
 
-    <!-- Lombok -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.36</version>
-    </dependency>
-  </dependencies>
-</dependencyManagement>
+      <!-- Lombok -->
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.36</version>
+      </dependency>
+
+      <!-- Hamcrest -->
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest</artifactId>
+        <version>2.2</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <!-- JUnit to run tests -->
@@ -195,6 +204,21 @@
       <artifactId>extentreports</artifactId>
       <version>${extentreport.version}</version>
     </dependency>
+
+    <!-- A Java DSL for synchronizing asynchronous operations -->
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>${awaitality.version}</version>
+    </dependency>
+
+    <!-- JDBC connection pool. -->
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>${hikaricp.version}</version>
+    </dependency>
+
 
   </dependencies>
 

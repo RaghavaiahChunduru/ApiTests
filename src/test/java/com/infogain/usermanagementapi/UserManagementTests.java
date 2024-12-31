@@ -2,7 +2,6 @@ package com.infogain.usermanagementapi;
 
 import static org.apache.http.HttpStatus.SC_OK;
 
-import com.infogain.annotations.RegressionTest;
 import com.infogain.api.usermanagement.User;
 import com.infogain.api.usermanagement.UserManagementAPI;
 import com.infogain.asserts.ValidateDB;
@@ -14,12 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
-@RegressionTest
 public class UserManagementTests {
 
-  public static final String READ_UPDATE_USER_SCHEMA_FILE_PATH =
-      "schemas/read-update-user-schema.json";
-  public static final String CREATE_USER_SCHEMA_FILE_PATH = "schemas/create-user-schema.json";
+  private static final String READ_UPDATE_USER_SCHEMA_FILE_PATH = "schemas/read-update-user-schema.json";
+  private static final String CREATE_USER_SCHEMA_FILE_PATH = "schemas/create-user-schema.json";
 
   private ThreadLocal<Long> userId = new ThreadLocal<>();
   private ThreadLocal<User> user = new ThreadLocal<>();
@@ -30,7 +27,6 @@ public class UserManagementTests {
   public void setup() {
 
     // Arrange
-    dbValidator.connectToDatabase();
     User newUser = User.getInstance();
     user.set(newUser);
 
@@ -72,7 +68,6 @@ public class UserManagementTests {
       userId.remove();
       user.remove();
     }
-    dbValidator.closeConnection();
   }
 
   @Test
@@ -117,19 +112,16 @@ public class UserManagementTests {
   @Test
   void assertThatAdminCanPartiallyUpdateAnExistingUser() {
     // Arrange
-    User partiallyUpdatedUser =
-        User.builder().setEmail("updatedemail@gmail.com").setPhone("1122334455").build();
+    User partiallyUpdatedUser = User.builder().setEmail("updatedemail@gmail.com").setPhone("1122334455").build();
 
     // Act
-    Response response =
-        UserManagementAPI.getInstance().patchUser(partiallyUpdatedUser, userId.get());
+    Response response = UserManagementAPI.getInstance().patchUser(partiallyUpdatedUser, userId.get());
     ExtentLogger.logResponse(response);
 
     // Assert API Response
-    User expectedUser =
-        user.get()
-            .setEmail(partiallyUpdatedUser.getEmail())
-            .setPhone(partiallyUpdatedUser.getPhone());
+    User expectedUser = user.get()
+        .setEmail(partiallyUpdatedUser.getEmail())
+        .setPhone(partiallyUpdatedUser.getPhone());
 
     VerifyUserResponse.assertThat(response)
         .statusCodeIs(SC_OK)
