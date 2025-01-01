@@ -1,10 +1,11 @@
 package com.infogain.usermanagementapi;
 
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.infogain.api.healthcheck.HealthCheckAPI.healthCheckForUserManagementApi;
 
-import com.infogain.annotations.HealthCheckTest;
-import com.infogain.api.healthcheck.HealthCheckAPI;
 import com.infogain.report.ExtentLogger;
+import com.infogain.annotations.HealthCheckTest;
 import groovy.util.logging.Slf4j;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,8 @@ import org.junit.jupiter.api.Test;
 class UserManagementHealthCheckTests {
   @Test
   void assertThatUserManagementServiceIsUpAndHealthy() {
-    Response response = HealthCheckAPI.healthCheck();
+    Response response = healthCheckForUserManagementApi();
     ExtentLogger.logResponse(response);
-    assertEquals(200, response.getStatusCode());
+    assertEquals(SC_OK, response.getStatusCode());
   }
 }

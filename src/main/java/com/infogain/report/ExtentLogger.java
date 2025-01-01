@@ -9,7 +9,8 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.SpecificationQuerier;
 
 public final class ExtentLogger {
-  private ExtentLogger() {}
+  private ExtentLogger() {
+  }
 
   public static void pass(String message) {
     ExtentReportManager.getExtent().pass(message);

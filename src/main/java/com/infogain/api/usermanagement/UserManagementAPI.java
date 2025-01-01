@@ -11,7 +11,8 @@ import io.restassured.specification.RequestSpecification;
 
 public final class UserManagementAPI {
 
-  private UserManagementAPI() {}
+  private UserManagementAPI() {
+  }
 
   public static UserManagementAPI getInstance() {
     return new UserManagementAPI();
@@ -38,7 +39,7 @@ public final class UserManagementAPI {
 
   public Response getUser(Long userId) {
     String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
-    String fullUrl = CONFIG.getString("BASE_URL") + endpoint;
+    String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
 
     RequestSpecification requestSpec = SpecFactory.getSpec();
 
@@ -59,7 +60,7 @@ public final class UserManagementAPI {
 
   public Response updateUser(User user, Long userId) {
     String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
-    String fullUrl = CONFIG.getString("BASE_URL") + endpoint;
+    String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
 
     RequestSpecification requestSpec = SpecFactory.getSpec();
 
@@ -83,7 +84,7 @@ public final class UserManagementAPI {
 
   public Response patchUser(User user, Long userId) {
     String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
-    String fullUrl = CONFIG.getString("BASE_URL") + endpoint;
+    String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
 
     RequestSpecification requestSpec = SpecFactory.getSpec();
 

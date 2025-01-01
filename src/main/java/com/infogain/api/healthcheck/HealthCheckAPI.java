@@ -10,10 +10,32 @@ import io.restassured.specification.RequestSpecification;
 
 public class HealthCheckAPI {
 
-  public static Response healthCheck() {
+  public static Response healthCheckForUserManagementApi() {
 
-    String endpoint = CONFIG.getString("HEALTHCHECK_ENDPOINT");
-    String fullUrl = CONFIG.getString("BASE_URL") + endpoint;
+    String endpoint = CONFIG.getString("USER_MANAGEMENT_HEALTHCHECK_ENDPOINT");
+    String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
+
+    RequestSpecification requestSpec = SpecFactory.getSpec();
+
+    ExtentLogger.logRequest(requestSpec, fullUrl);
+
+    return given()
+        .spec(requestSpec)
+        .log()
+        .ifValidationFails()
+        .when()
+        .get(endpoint)
+        .then()
+        .log()
+        .ifError()
+        .extract()
+        .response();
+  }
+
+  public static Response healthCheckForArithmeticApi() {
+
+    String endpoint = CONFIG.getString("ARITHMETIC_HEALTHCHECK_ENDPOINT");
+    String fullUrl = CONFIG.getString("ARITHMETIC_BASE_URL") + endpoint;
 
     RequestSpecification requestSpec = SpecFactory.getSpec();
 

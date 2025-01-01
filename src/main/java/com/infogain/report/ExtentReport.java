@@ -9,7 +9,8 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 import java.util.Objects;
 
 public final class ExtentReport {
-  private ExtentReport() {}
+  private ExtentReport() {
+  }
 
   private static ExtentReports extentreports;
   private static ExtentTest extenttest;
@@ -25,14 +26,15 @@ public final class ExtentReport {
       // try {
       // spark.loadJSONConfig(configJson);
       // } catch (IOException e) {
-      // throw new RuntimeException("Failed to load Extent Report configuration from JSON file", e);
+      // throw new RuntimeException("Failed to load Extent Report configuration from
+      // JSON file", e);
 
       // }
       extentreports.attachReporter(spark);
 
       spark.config().setTheme(Theme.STANDARD);
       spark.config().setDocumentTitle("Automation Report");
-      spark.config().setReportName("Regression Report");
+      spark.config().setReportName("ApiTests Report");
     }
   }
 

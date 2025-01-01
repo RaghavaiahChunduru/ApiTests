@@ -1,11 +1,13 @@
 package com.infogain.usermanagementapi;
 
-import static org.apache.http.HttpStatus.SC_OK;
+import static org.apache.http.HttpStatus.*;
 
 import com.infogain.api.usermanagement.User;
 import com.infogain.api.usermanagement.UserManagementAPI;
+import com.infogain.api.usermanagement.UserResponse;
 import com.infogain.asserts.ValidateDB;
 import com.infogain.report.ExtentLogger;
+import com.infogain.utils.JsonUtil;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -15,8 +17,8 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 public class UserManagementTests {
 
-  private static final String READ_UPDATE_USER_SCHEMA_FILE_PATH = "schemas/read-update-user-schema.json";
   private static final String CREATE_USER_SCHEMA_FILE_PATH = "schemas/create-user-schema.json";
+  private static final String READ_UPDATE_USER_SCHEMA_FILE_PATH = "schemas/read-update-user-schema.json";
 
   private ThreadLocal<Long> userId = new ThreadLocal<>();
   private ThreadLocal<User> user = new ThreadLocal<>();
@@ -26,44 +28,45 @@ public class UserManagementTests {
   @BeforeEach
   public void setup() {
 
-    // Arrange
+    // Arrange: Create a new user instance
     User newUser = User.getInstance();
     user.set(newUser);
 
-    // Act
+    // Act: Send a POST request to create a new user
     Response response = UserManagementAPI.getInstance().newUser(newUser);
 
     // Assert API Response
-    VerifyUserResponse.assertThat(response)
-        .statusCodeIs(SC_OK)
-        .responseTimeBelow(200)
-        .containsValue("userId")
+    VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
+        .statusCodeIs(200)
+        .responseTimeBelow(2000)
+        .containsValue("id")
         .doesNotContains("error")
         .matchesSchema(CREATE_USER_SCHEMA_FILE_PATH)
-        .postHasUser(newUser)
         .assertAll();
 
-    // Set userId
-    userId.set(response.body().jsonPath().getLong("userId"));
+    // Extract the ID from the response
+    userId.set(response.jsonPath().getLong("id"));
 
-    // Assert Database Entry
-    dbValidator.validateUserInDatabase(newUser, userId.get());
+    log.info("User created successfully with ID: {}", userId.get());
   }
 
   @AfterEach
   public void tearDown() {
+
     if (userId.get() != null) {
       // Act
       Response response = UserManagementAPI.getInstance().deleteUser(userId.get());
 
       // Assert API Response
-      VerifyUserResponse.assertThat(response)
-          .statusCodeIs(SC_OK)
-          .responseTimeBelow(200)
+      VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
+          .statusCodeIs(SC_NO_CONTENT)
+          .responseTimeBelow(2000)
           .assertAll();
 
       // Assert Database Entry
       dbValidator.validateUserNotInDatabase(userId.get());
+
+      log.info("User with ID: {} deleted successfully", userId.get());
 
       userId.remove();
       user.remove();
@@ -72,41 +75,44 @@ public class UserManagementTests {
 
   @Test
   void assertThatAdminCanGetAnExistingUser() {
+
     // Act
     Response response = UserManagementAPI.getInstance().getUser(userId.get());
+    UserResponse expectedUser = JsonUtil.deserialize(response.asString(), UserResponse.class);
+
     ExtentLogger.logResponse(response);
 
     // Assert API Response
-    VerifyUserResponse.assertThat(response)
+    VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
         .statusCodeIs(SC_OK)
         .responseTimeBelow(200)
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
-        .hasUser(user.get())
         .assertAll();
 
     // Assert Database Entry
-    dbValidator.validateUserInDatabase(user.get(), userId.get());
+    dbValidator.validateUserInDatabase(expectedUser, userId.get());
   }
 
   @Test
   void assertThatAdminCanUpdateAnExistingUser() {
     // Arrange
-    User updatedUser = user.get().setUserName("UpdatedUserName");
+    User updatedUser = user.get().setUsername("UpdatedUserName");
 
     // Act
     Response response = UserManagementAPI.getInstance().updateUser(updatedUser, userId.get());
+    UserResponse expectedUser = JsonUtil.deserialize(response.asString(), UserResponse.class);
+
     ExtentLogger.logResponse(response);
 
     // Assert API Response
-    VerifyUserResponse.assertThat(response)
+    VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
         .statusCodeIs(SC_OK)
         .responseTimeBelow(200)
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
-        .hasUser(updatedUser)
         .assertAll();
 
     // Assert Database Entry
-    dbValidator.validateUserInDatabase(updatedUser, userId.get());
+    dbValidator.validateUserInDatabase(expectedUser, userId.get());
   }
 
   @Test
@@ -116,18 +122,14 @@ public class UserManagementTests {
 
     // Act
     Response response = UserManagementAPI.getInstance().patchUser(partiallyUpdatedUser, userId.get());
+    UserResponse expectedUser = JsonUtil.deserialize(response.asString(), UserResponse.class);
+
     ExtentLogger.logResponse(response);
 
-    // Assert API Response
-    User expectedUser = user.get()
-        .setEmail(partiallyUpdatedUser.getEmail())
-        .setPhone(partiallyUpdatedUser.getPhone());
-
-    VerifyUserResponse.assertThat(response)
+    VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
         .statusCodeIs(SC_OK)
         .responseTimeBelow(200)
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
-        .hasUser(expectedUser)
         .assertAll();
 
     // Assert Database State

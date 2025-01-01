@@ -1,0 +1,15 @@
+operand,expectedOutput,expectedStatus
+5,120,200
+0,1,200
+1,1,200
+-5,"Error: Factorial of negative number not allowed",400
+"string","Error: Invalid input",400
+@,"Error: Invalid input",400
+null,"Error: Null input not allowed",400
+"","Error: Empty input",400
+" ","Error: Empty input",400
+5.5,"Error: Factorial of non-integer not allowed",400
+1000,"Error: Result exceeds computational limits",500
+-Infinity,"Error: Factorial of negative number not allowed",400
+Infinity,"Error: Factorial of infinity not allowed",400
+NaN,"Error: Not a valid input",400

@@ -9,80 +9,86 @@ import java.util.function.Predicate;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
-public abstract class VerifyResponse<SELF_TYPE extends VerifyResponse<?>> {
-  protected SELF_TYPE selfType;
+public abstract class VerifyResponse<SELF_TYPE extends VerifyResponse<SELF_TYPE>> {
+
   protected Response response;
   protected SoftAssertions softAssertions;
 
-  protected VerifyResponse(Class<SELF_TYPE> selfType, Response response) {
-    this.selfType = selfType.cast(this);
+  // Constructor for initializing with response and soft assertions
+  protected VerifyResponse(Response response) {
     this.response = response;
     this.softAssertions = new SoftAssertions();
   }
 
+  // Factory method for creating the appropriate VerifyResponse instance
+  public static <SELF_TYPE extends VerifyResponse<SELF_TYPE>> SELF_TYPE assertThat(Response response,
+      Class<SELF_TYPE> clazz) {
+    try {
+      return clazz.getDeclaredConstructor(Response.class).newInstance(response); // Create instance using reflection
+    } catch (Exception e) {
+      throw new RuntimeException("Unable to create VerifyResponse instance", e);
+    }
+  }
+
   public SELF_TYPE statusCodeIs(int statusCode) {
     Assertions.assertThat(response.getStatusCode()).describedAs("statusCode").isEqualTo(statusCode);
-
-    return selfType;
+    return selfType();
   }
 
   public SELF_TYPE responseTimeBelow(int timeInMilliSeconds) {
     Assertions.assertThat(response.timeIn(TimeUnit.MILLISECONDS))
         .describedAs("response")
-        .isEqualTo(timeInMilliSeconds);
-
-    return selfType;
+        .isLessThan(timeInMilliSeconds);
+    return selfType();
   }
 
   public SELF_TYPE contentTypeIs(ContentType contentType) {
-    softAssertions
-        .assertThat(response.getContentType())
+    softAssertions.assertThat(response.getContentType())
         .as("Content Type validation")
         .isEqualTo(contentType.toString());
-    return selfType;
+    return selfType();
   }
 
   public SELF_TYPE matchingRule(Predicate<Response> condition, String errorMessage) {
     softAssertions.assertThat(condition).withFailMessage(errorMessage).accepts(response);
-    return selfType;
+    return selfType();
   }
 
   public SELF_TYPE hasKeyWithValue(String key, String expectedValue) {
     String actualValue = response.jsonPath().getString(key);
-    softAssertions
-        .assertThat(actualValue)
+    softAssertions.assertThat(actualValue)
         .as("body node validation in response")
         .isEqualTo(expectedValue);
-    return selfType;
+    return selfType();
   }
 
   public SELF_TYPE containsValue(String value) {
-    softAssertions
-        .assertThat(response.getBody().asString())
+    softAssertions.assertThat(response.getBody().asString())
         .describedAs("responseBody")
         .contains(value);
-
-    return selfType;
+    return selfType();
   }
 
   public SELF_TYPE doesNotContains(String value) {
-    softAssertions
-        .assertThat(response.body().asString())
+    softAssertions.assertThat(response.body().asString())
         .as("Body node validation in response")
         .doesNotContain(value);
-    return selfType;
+    return selfType();
   }
 
   public SELF_TYPE matchesSchema(String fileClassPath) {
-    softAssertions
-        .assertThat(response.then().body(matchesJsonSchemaInClasspath(fileClassPath)))
+    softAssertions.assertThat(response.then().body(matchesJsonSchemaInClasspath(fileClassPath)))
         .describedAs("Schema validation")
         .getWritableAssertionInfo();
-
-    return selfType;
+    return selfType();
   }
 
   public void assertAll() {
     softAssertions.assertAll();
+  }
+
+  // Return self type
+  protected SELF_TYPE selfType() {
+    return (SELF_TYPE) this;
   }
 }

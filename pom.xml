@@ -24,6 +24,7 @@
     <extentreport.version>5.1.2</extentreport.version>
     <awaitality.version>4.2.2</awaitality.version>
     <hikaricp.version>6.2.1</hikaricp.version>
+    <hsqldb.version>2.7.4</hsqldb.version>
     <maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
   </properties>
@@ -218,6 +219,14 @@
       <artifactId>HikariCP</artifactId>
       <version>${hikaricp.version}</version>
     </dependency>
+
+    <!-- HSQLDB - Lightweight 100% Java SQL Database Engine -->
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>${hsqldb.version}</version>
+    </dependency>
+
 
 
   </dependencies>

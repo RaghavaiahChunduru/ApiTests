@@ -16,14 +16,13 @@ public class SpecFactory {
     String username = CONFIG.getString("USERNAME");
     String password = CONFIG.getString("PASSWORD");
 
-    String authValue =
-        "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+    String authValue = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
 
     return new RequestSpecBuilder()
         .addHeader("Content-Type", "application/json")
         .addHeader("Accept", "application/json")
         .addHeader("Authorization", authValue)
-        .setBaseUri(CONFIG.getString("BASE_URL"))
+        .setBaseUri(CONFIG.getString("USER_MANAGEMENT_BASE_URL"))
         .setConfig(
             RestAssuredConfig.config()
                 .logConfig(LogConfig.logConfig().blacklistHeaders(Arrays.asList("Authorization"))))

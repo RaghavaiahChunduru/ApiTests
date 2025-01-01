@@ -1,5 +1,7 @@
 package com.infogain.extensions;
 
+import static com.infogain.utils.ConfigUtil.CONFIG;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
@@ -26,9 +28,9 @@ public class HikariCPExtension implements BeforeAllCallback, AfterAllCallback {
 
         // Load HikariCP configurations
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(System.getProperty("DB_URL", "jdbc:mysql://localhost:3306/testdb"));
-        hikariConfig.setUsername(System.getProperty("DB_USERNAME", "root"));
-        hikariConfig.setPassword(System.getProperty("DB_PASSWORD", "password"));
+        hikariConfig.setJdbcUrl(CONFIG.getString("DB_URL"));
+        hikariConfig.setUsername(CONFIG.getString("DB_USERNAME"));
+        hikariConfig.setPassword(CONFIG.getString("DB_PASSWORD"));
         hikariConfig.setMaximumPoolSize(10);
         hikariConfig.setMinimumIdle(2);
         hikariConfig.setIdleTimeout(30000);
