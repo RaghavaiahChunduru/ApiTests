@@ -21,7 +21,7 @@ public final class UserManagementAPI {
   public Response newUser(User user) {
 
     String endpoint = CONFIG.getString("USER_ENDPOINT");
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForUserManagementService();
 
     return given()
         .spec(requestSpec)
@@ -41,7 +41,7 @@ public final class UserManagementAPI {
     String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
     String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForUserManagementService();
 
     ExtentLogger.logRequest(requestSpec, fullUrl);
 
@@ -62,7 +62,7 @@ public final class UserManagementAPI {
     String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
     String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForUserManagementService();
 
     String requestBody = JsonUtil.serialize(user);
 
@@ -86,7 +86,7 @@ public final class UserManagementAPI {
     String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
     String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForUserManagementService();
 
     String requestBody = JsonUtil.serialize(user);
 
@@ -108,7 +108,7 @@ public final class UserManagementAPI {
 
   public Response deleteUser(Long userId) {
     String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForUserManagementService();
 
     return given()
         .spec(requestSpec)

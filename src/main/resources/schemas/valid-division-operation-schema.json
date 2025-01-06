@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "firstOperand": {
+            "type": "number"
+        },
+        "secondOperand": {
+            "type": "number"
+        },
+        "operatorId": {
+            "type": "integer"
+        },
+        "result": {
+            "type": [
+                "number",
+                "string"
+            ]
+        },
+        "createdAt": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "firstOperand",
+        "secondOperand",
+        "operatorId",
+        "result",
+        "createdBy",
+        "createdAt"
+    ]
+}

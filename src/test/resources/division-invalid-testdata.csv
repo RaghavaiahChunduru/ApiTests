@@ -1,0 +1,24 @@
+firstOperand,secondOperand,expectedStatus,expectedCode,expectedMessage
+5,0,NOT_ACCEPTABLE,406,Zero as Divisor is not allowed
+" ",5,BAD_REQUEST,400,Request body is missing or invalid
+5," ",BAD_REQUEST,400,Request body is missing or invalid
+"",5,BAD_REQUEST,400,Request body is missing or invalid
+5,"",BAD_REQUEST,400,Request body is missing or invalid
+,,BAD_REQUEST,400,Request body is missing or invalid
+5,aaa,BAD_REQUEST,400,Request body is missing or invalid
+abc,5,BAD_REQUEST,400,Request body is missing or invalid
+sss,qqq,BAD_REQUEST,400,Request body is missing or invalid
+@,5,BAD_REQUEST,400,Request body is missing or invalid
+5,*,BAD_REQUEST,400,Request body is missing or invalid
+-,$,BAD_REQUEST,400,Request body is missing or invalid
+
+
+
+
+
+
+
+
+
+
+

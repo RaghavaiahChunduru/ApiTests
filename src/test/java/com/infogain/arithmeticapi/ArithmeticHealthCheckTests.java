@@ -1,9 +1,9 @@
 package com.infogain.arithmeticapi;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.apache.http.HttpStatus.SC_OK;
+import static com.infogain.api.healthcheck.HealthCheckAPI.healthCheckForArithmeticApi;
 
 import com.infogain.annotations.HealthCheckTest;
-import com.infogain.api.healthcheck.HealthCheckAPI;
 import com.infogain.report.ExtentLogger;
 import groovy.util.logging.Slf4j;
 import io.restassured.response.Response;
@@ -14,8 +14,11 @@ import org.junit.jupiter.api.Test;
 class ArithmeticHealthCheckTests {
   @Test
   void assertThatArithmeticServiceIsUpAndHealthy() {
-    Response response = HealthCheckAPI.healthCheckForArithmeticApi();
+    Response response = healthCheckForArithmeticApi();
     ExtentLogger.logResponse(response);
-    assertEquals(200, response.getStatusCode());
+
+    VerifyArithmeticHealthCheckResponse.assertThat(response, VerifyArithmeticHealthCheckResponse.class)
+        .statusCodeIs(SC_OK)
+        .hasKeyWithValue("status", "UP");
   }
 }

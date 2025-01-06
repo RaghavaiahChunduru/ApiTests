@@ -20,6 +20,16 @@
         <Logger name="org.openqa.selenium.remote" level="WARN" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
+        <!-- Suppress INFO logs from Hikari -->
+
+        <Logger name="com.infogain.extensions.HikariCPExtension" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Suppress INFO logs Config -->
+        <Logger name="com.infogain.config.TestConfig" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
 
         <!-- Root Logger -->
         <Root level="INFO">

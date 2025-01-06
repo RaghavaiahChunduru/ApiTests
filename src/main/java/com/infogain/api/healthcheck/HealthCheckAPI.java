@@ -13,9 +13,9 @@ public class HealthCheckAPI {
   public static Response healthCheckForUserManagementApi() {
 
     String endpoint = CONFIG.getString("USER_MANAGEMENT_HEALTHCHECK_ENDPOINT");
-    String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
+    String fullUrl = CONFIG.getString("USER_MANAGEMENT_HEALTH_CHECK_BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForUserManagementhHealth();
 
     ExtentLogger.logRequest(requestSpec, fullUrl);
 
@@ -35,9 +35,9 @@ public class HealthCheckAPI {
   public static Response healthCheckForArithmeticApi() {
 
     String endpoint = CONFIG.getString("ARITHMETIC_HEALTHCHECK_ENDPOINT");
-    String fullUrl = CONFIG.getString("ARITHMETIC_BASE_URL") + endpoint;
+    String fullUrl = CONFIG.getString("ARITHMETIC_HEALTH_CHECK_BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForArithmeticHealth();
 
     ExtentLogger.logRequest(requestSpec, fullUrl);
 

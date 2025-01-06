@@ -6,20 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Slf4j
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder(setterPrefix = "set")
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArithmeticResponse {
+public class DivisionOperands {
 
-    private Long id;
-    private Double firstOperand;
-    private Double secondOperand;
-    private Integer operatorId;
-    private Double result;
-    private String createdBy;
-    private String createdAt;
+    private Object firstOperand;
+    private Object secondOperand;
 }

@@ -9,6 +9,10 @@ import java.util.function.Predicate;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.machinezoo.noexception.Exceptions;
+
 public abstract class VerifyResponse<SELF_TYPE extends VerifyResponse<SELF_TYPE>> {
 
   protected Response response;
@@ -64,15 +68,45 @@ public abstract class VerifyResponse<SELF_TYPE extends VerifyResponse<SELF_TYPE>
 
   public SELF_TYPE containsValue(String value) {
     softAssertions.assertThat(response.getBody().asString())
-        .describedAs("responseBody")
+        .as("Response should contains the value: " + value)
         .contains(value);
     return selfType();
   }
 
-  public SELF_TYPE doesNotContains(String value) {
-    softAssertions.assertThat(response.body().asString())
-        .as("Body node validation in response")
+  public SELF_TYPE doesNotContainsValue(String value) {
+    softAssertions.assertThat(response.getBody().asString())
+        .as("Response should not contains the value: " + value)
         .doesNotContain(value);
+    return selfType();
+  }
+
+  public SELF_TYPE containsKey(String key) {
+    Exceptions.wrap(e -> new RuntimeException("Failed to validate key in JSON response", e))
+        .run(() -> {
+          ObjectMapper mapper = new ObjectMapper();
+          JsonNode responseBody = mapper.readTree(response.body().asString());
+
+          // Perform assertion
+          softAssertions.assertThat(responseBody.has(key))
+              .as("Response should contain the key: " + key)
+              .isTrue();
+        });
+
+    return selfType();
+  }
+
+  public SELF_TYPE doesNotContainKey(String key) {
+    Exceptions.wrap(e -> new RuntimeException("Failed to validate absence of key in JSON response", e))
+        .run(() -> {
+          ObjectMapper mapper = new ObjectMapper();
+          JsonNode responseBody = mapper.readTree(response.body().asString());
+
+          // Perform assertion
+          softAssertions.assertThat(responseBody.has(key))
+              .as("Response should not contain the key: " + key)
+              .isFalse();
+        });
+
     return selfType();
   }
 

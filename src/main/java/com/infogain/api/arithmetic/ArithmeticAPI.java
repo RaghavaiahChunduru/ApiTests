@@ -2,14 +2,15 @@ package com.infogain.api.arithmetic;
 
 import static com.infogain.utils.ConfigUtil.CONFIG;
 import static io.restassured.RestAssured.given;
-
-import java.util.HashMap;
-import java.util.Map;
 import com.infogain.api.basespec.SpecFactory;
 import com.infogain.report.ExtentLogger;
+import com.infogain.utils.JsonUtil;
+import com.infogain.utils.PayloadUtil;
+import groovy.util.logging.Slf4j;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+@Slf4j
 public final class ArithmeticAPI {
 
   private ArithmeticAPI() {
@@ -24,13 +25,16 @@ public final class ArithmeticAPI {
     String endpoint = CONFIG.getString("ADDITION_ENDPOINT");
     String fullUrl = CONFIG.getString("ARITHMETIC_BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForArithmeticService();
 
-    Map<String, Object> requestBody = new HashMap<>();
-    requestBody.put("firstOperand", operand1);
-    requestBody.put("secondOperand", operand2);
+    AdditionOperands additionOperands = AdditionOperands.builder()
+        .setFirstOperand(operand1)
+        .setSecondOperand(operand2)
+        .build();
 
-    ExtentLogger.logRequest(requestSpec, fullUrl, requestBody.toString());
+    String requestBody = JsonUtil.serialize(additionOperands);
+
+    ExtentLogger.logRequest(requestSpec, fullUrl, requestBody);
 
     return given()
         .spec(requestSpec)
@@ -51,13 +55,16 @@ public final class ArithmeticAPI {
     String endpoint = CONFIG.getString("DIVISION_ENDPOINT");
     String fullUrl = CONFIG.getString("ARITHMETIC_BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForArithmeticService();
 
-    Map<String, Object> requestBody = new HashMap<>();
-    requestBody.put("firstOperand", operand1);
-    requestBody.put("secondOperand", operand2);
+    DivisionOperands additionOperands = DivisionOperands.builder()
+        .setFirstOperand(operand1)
+        .setSecondOperand(operand2)
+        .build();
 
-    ExtentLogger.logRequest(requestSpec, fullUrl, requestBody.toString());
+    String requestBody = JsonUtil.serialize(additionOperands);
+
+    ExtentLogger.logRequest(requestSpec, fullUrl, requestBody);
 
     return given()
         .spec(requestSpec)
@@ -78,7 +85,7 @@ public final class ArithmeticAPI {
     String endpoint = CONFIG.getString("FACTORIAL_ENDPOINT");
     String fullUrl = CONFIG.getString("ARITHMETIC_BASE_URL") + endpoint;
 
-    RequestSpecification requestSpec = SpecFactory.getSpec();
+    RequestSpecification requestSpec = SpecFactory.getSpecForArithmeticService();
 
     ExtentLogger.logRequest(requestSpec, fullUrl);
 

@@ -26,7 +26,7 @@ public class UserManagementTests {
   private final ValidateDB dbValidator = ValidateDB.getInstance();
 
   @BeforeEach
-  public void setup() {
+  public void setup() throws Exception {
 
     // Arrange: Create a new user instance
     User newUser = User.getInstance();
@@ -40,7 +40,7 @@ public class UserManagementTests {
         .statusCodeIs(200)
         .responseTimeBelow(2000)
         .containsValue("id")
-        .doesNotContains("error")
+        .doesNotContainKey("error")
         .matchesSchema(CREATE_USER_SCHEMA_FILE_PATH)
         .assertAll();
 

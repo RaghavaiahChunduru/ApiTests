@@ -1,0 +1,13 @@
+firstOperand,secondOperand,expectedStatus,expectedCode,expectedMessage
+a,b,BAD_REQUEST,400,Request body is missing or invalid
+5," " ,BAD_REQUEST,400,Request body is missing or invalid
+" ",5,BAD_REQUEST,400,Request body is missing or invalid
+null,5,BAD_REQUEST,400,Request body is missing or invalid
+"","",BAD_REQUEST,400,Request body is missing or invalid
+,,BAD_REQUEST,400,Request body is missing or invalid
+
+
+
+
+
+
