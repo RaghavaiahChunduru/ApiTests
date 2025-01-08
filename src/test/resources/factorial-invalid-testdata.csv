@@ -1,0 +1,9 @@
+operand,expectedStatus,expectedCode,expectedMessage
+5.25,BAD_REQUEST,400,Invalid number format in path variable
+-5,NOT_ACCEPTABLE,406,Operand should have proper value 
+abc,BAD_REQUEST,400,Invalid number format in path variable
+@,BAD_REQUEST,400,Invalid number format in path variable
+" ",BAD_REQUEST,400,Value can not be Space
+"",BAD_REQUEST,400,Value can not be Empty
+NaN,NOT_ACCEPTABLE,406,Operand should have proper value
+4.9E-324,NOT_ACCEPTABLE,406,Operand should have proper value

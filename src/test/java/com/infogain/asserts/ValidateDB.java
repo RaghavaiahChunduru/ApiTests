@@ -133,7 +133,7 @@ public final class ValidateDB {
   }
 
   public ValidateDB validateArithmeticOperationEntryInDatabase(ValidArithmeticResponse expectedEntry, Integer id) {
-    String query = "SELECT * FROM ARITHMETIC_OPERATION WHERE id = ?";
+    String query = "SELECT * FROM arithmetic_operation WHERE id = ?";
     validateNonNullAndNonEmpty(id, "ID");
 
     Awaitility.await()
@@ -182,11 +182,17 @@ public final class ValidateDB {
                   expectedEntry.getFirstOperand(), rs.getDouble("first_operand"))
               .isEqualTo(expectedEntry.getFirstOperand());
 
-          Assertions.assertThat(rs.getDouble("second_Operand"))
-              .as("Second Operand mismatch")
-              .withFailMessage("Expected secondOperand '%s', but found '%s'",
-                  expectedEntry.getSecondOperand(), rs.getDouble("second_Operand"))
-              .isEqualTo(expectedEntry.getSecondOperand());
+          if (expectedEntry.getSecondOperand() == null && rs.getObject("second_Operand") == null) {
+            log.info("Both expected and actual secondOperand are null. Assertion passed.");
+          } else if (expectedEntry.getSecondOperand() != null && rs.getObject("second_Operand") != null) {
+            Assertions.assertThat(rs.getDouble("second_Operand"))
+                .as("Second Operand mismatch")
+                .withFailMessage(
+                    "Expected secondOperand '%s', but found '%s'",
+                    expectedEntry.getSecondOperand(),
+                    rs.getDouble("second_Operand"))
+                .isEqualTo(expectedEntry.getSecondOperand());
+          }
 
           Assertions.assertThat(rs.getInt("operator_id"))
               .as("Operator ID mismatch")

@@ -13,11 +13,10 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 @Slf4j
 public class ArithmeticTests {
 
-  private static final String VALID_ADD_OPERATION_SCHEMA_FILE_PATH = "schemas/valid-add-operation-schema.json";
-  private static final String INVALID_ADD_OPERATION_SCHEMA_FILE_PATH = "schemas/invalid-add-operation-schema.json";
+  private static final String VALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH = "schemas/valid-arithmetic-operation-schema.json";
+  private static final String VALID_FACTORIAL_OPERATION_SCHEMA_FILE_PATH = "schemas/valid-factorial-operation-schema.json";
 
-  private static final String VALID_DIVISION_OPERATION_SCHEMA_FILE_PATH = "schemas/valid-division-operation-schema.json";
-  private static final String FACTORIAL_OPERATION_SCHEMA_FILE_PATH = "schemas/factorial-operation-schema.json";
+  private static final String INVALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH = "schemas/invalid-arithmetic-operation-schema.json";
 
   private final ArithmeticAPI arithmeticAPI = ArithmeticAPI.getInstance();
   private ThreadLocal<Integer> id = new ThreadLocal<>();
@@ -43,7 +42,7 @@ public class ArithmeticTests {
         .responseTimeBelow(2000)
         .containsKey("id")
         .doesNotContainsValue("error")
-        .matchesSchema(VALID_ADD_OPERATION_SCHEMA_FILE_PATH)
+        .matchesSchema(VALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH)
         .assertAll();
 
     // Assert Database Entry
@@ -67,7 +66,7 @@ public class ArithmeticTests {
         .hasKeyWithValue("message", expectedMessage)
         .responseTimeBelow(2000)
         .doesNotContainKey("id")
-        .matchesSchema(INVALID_ADD_OPERATION_SCHEMA_FILE_PATH)
+        .matchesSchema(INVALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH)
         .assertAll();
   }
 
@@ -91,7 +90,7 @@ public class ArithmeticTests {
         .responseTimeBelow(2000)
         .containsKey("id")
         .doesNotContainsValue("error")
-        .matchesSchema(VALID_DIVISION_OPERATION_SCHEMA_FILE_PATH)
+        .matchesSchema(VALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH)
         .assertAll();
 
     // Assert Database Entry
@@ -115,13 +114,13 @@ public class ArithmeticTests {
         .hasKeyWithValue("message", expectedMessage)
         .responseTimeBelow(2000)
         .doesNotContainKey("id")
-        .matchesSchema(INVALID_ADD_OPERATION_SCHEMA_FILE_PATH)
+        .matchesSchema(INVALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH)
         .assertAll();
   }
 
   @ParameterizedTest(name = "{index} => operand={0}, expectedOutput={1}, expectedStatus={2}")
-  @CsvFileSource(resources = "/factorial-testdata.csv", numLinesToSkip = 1)
-  void assertFactorialOperation(Object operand, String expectedOutput, int expectedStatus) {
+  @CsvFileSource(resources = "/factorial-valid-testdata.csv", numLinesToSkip = 1)
+  void assertValidFactorialOperation(Object operand, String expectedOutput, int expectedStatus) {
 
     // Act
     Response response = arithmeticAPI.getFactorial(operand);
@@ -138,10 +137,32 @@ public class ArithmeticTests {
         .responseTimeBelow(2000)
         .containsKey("id")
         .doesNotContainsValue("error")
-        .matchesSchema(FACTORIAL_OPERATION_SCHEMA_FILE_PATH)
+        .matchesSchema(VALID_FACTORIAL_OPERATION_SCHEMA_FILE_PATH)
         .assertAll();
 
     // Assert Database Entry
     dbValidator.validateArithmeticOperationEntryInDatabase(expectedEntry, id.get());
+  }
+
+  @ParameterizedTest(name = "{index} => operand={0}, expectedStatus={1}, expectedCode={2},expectedMessage={3}")
+  @CsvFileSource(resources = "/factorial-invalid-testdata.csv", numLinesToSkip = 1)
+  void assertInvalidFactorialOperation(Object operand, String expectedStatus,
+      int expectedCode, String expectedMessage) {
+
+    // Act
+    Response response = arithmeticAPI.getFactorial(operand);
+
+    ExtentLogger.logResponse(response);
+
+    // Assert API Response
+    VerifyArithmeticOperationResponse.assertThat(response,
+        VerifyArithmeticOperationResponse.class)
+        .statusCodeIs(expectedCode)
+        .hasKeyWithValue("status", expectedStatus)
+        .hasKeyWithValue("message", expectedMessage)
+        .responseTimeBelow(2000)
+        .doesNotContainKey("id")
+        .matchesSchema(INVALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH)
+        .assertAll();
   }
 }

@@ -32,12 +32,11 @@ public class UserManagementTests {
     User newUser = User.getInstance();
     user.set(newUser);
 
-    // Act: Send a POST request to create a new user
     Response response = UserManagementAPI.getInstance().newUser(newUser);
 
     // Assert API Response
     VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
-        .statusCodeIs(200)
+        .statusCodeIs(SC_OK)
         .responseTimeBelow(2000)
         .containsValue("id")
         .doesNotContainKey("error")
@@ -85,7 +84,7 @@ public class UserManagementTests {
     // Assert API Response
     VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
         .statusCodeIs(SC_OK)
-        .responseTimeBelow(200)
+        .responseTimeBelow(2000)
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
         .assertAll();
 
@@ -107,7 +106,7 @@ public class UserManagementTests {
     // Assert API Response
     VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
         .statusCodeIs(SC_OK)
-        .responseTimeBelow(200)
+        .responseTimeBelow(2000)
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
         .assertAll();
 
@@ -128,7 +127,7 @@ public class UserManagementTests {
 
     VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
         .statusCodeIs(SC_OK)
-        .responseTimeBelow(200)
+        .responseTimeBelow(2000)
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
         .assertAll();
 

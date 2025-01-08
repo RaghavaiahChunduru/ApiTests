@@ -1,0 +1,8 @@
+operand,expectedOutput,expectedStatus
+5,120.0,200
+0,1.0,200
+1,1.0,200
+0xA,3628800.0,200
+1000,Infinity,200
+
+

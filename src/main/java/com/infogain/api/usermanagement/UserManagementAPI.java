@@ -40,6 +40,7 @@ public final class UserManagementAPI {
   public Response getUser(Long userId) {
     String endpoint = CONFIG.getString("USER_ID_ENDPOINT");
     String fullUrl = CONFIG.getString("USER_MANAGEMENT_BASE_URL") + endpoint;
+    fullUrl = fullUrl.replace("{userId}", userId.toString());
 
     RequestSpecification requestSpec = SpecFactory.getSpecForUserManagementService();
 

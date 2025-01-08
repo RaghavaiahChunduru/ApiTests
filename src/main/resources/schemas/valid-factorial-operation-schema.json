@@ -9,7 +9,7 @@
             "type": "number"
         },
         "secondOperand": {
-            "type": "number"
+            "type": "null"
         },
         "operatorId": {
             "type": "integer"
@@ -19,6 +19,9 @@
                 "number",
                 "string"
             ]
+        },
+        "createdBy": {
+            "type": "string"
         },
         "createdAt": {
             "type": "string"

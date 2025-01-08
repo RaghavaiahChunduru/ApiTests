@@ -82,8 +82,9 @@ public final class ArithmeticAPI {
 
   public Response getFactorial(Object operand) {
 
-    String endpoint = CONFIG.getString("FACTORIAL_ENDPOINT");
+    String endpoint = CONFIG.getString("FACTORIAL_NUM_ENDPOINT");
     String fullUrl = CONFIG.getString("ARITHMETIC_BASE_URL") + endpoint;
+    fullUrl = fullUrl.replace("{operand}", operand.toString());
 
     RequestSpecification requestSpec = SpecFactory.getSpecForArithmeticService();
 
@@ -94,7 +95,7 @@ public final class ArithmeticAPI {
         .log()
         .ifValidationFails()
         .when()
-        .get(endpoint, operand)
+        .post(endpoint, operand)
         .then()
         .log()
         .ifError()

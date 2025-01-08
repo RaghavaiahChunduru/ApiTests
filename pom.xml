@@ -25,6 +25,7 @@
     <awaitality.version>4.2.2</awaitality.version>
     <hikaricp.version>6.2.1</hikaricp.version>
     <hsqldb.version>2.7.4</hsqldb.version>
+    <mysql-connector.version>9.1.0</mysql-connector.version>
     <maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
   </properties>
@@ -227,7 +228,12 @@
       <version>${hsqldb.version}</version>
     </dependency>
 
-
+    <!--  MySQL JDBC driver -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>${mysql-connector.version}</version>
+    </dependency>
 
   </dependencies>
 
