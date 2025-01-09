@@ -1,5 +1,10 @@
 package com.infogain.arithmeticapi;
 
+import static com.infogain.enums.Author.RAVI;
+import static com.infogain.enums.Category.REGRESSION;
+import static com.infogain.enums.Service.ARITHMETIC_OPERATION;
+
+import com.infogain.annotations.FrameworkAnnotations;
 import com.infogain.api.arithmetic.ArithmeticAPI;
 import com.infogain.api.arithmetic.ValidArithmeticResponse;
 import com.infogain.asserts.ValidateDB;
@@ -11,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 @Slf4j
+@FrameworkAnnotations(Author = { RAVI }, Category = REGRESSION, Service = ARITHMETIC_OPERATION)
 public class ArithmeticTests {
 
   private static final String VALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH = "schemas/valid-arithmetic-operation-schema.json";

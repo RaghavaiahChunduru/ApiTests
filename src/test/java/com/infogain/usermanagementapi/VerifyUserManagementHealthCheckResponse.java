@@ -7,6 +7,5 @@ public class VerifyUserManagementHealthCheckResponse extends VerifyResponse<Veri
 
     public VerifyUserManagementHealthCheckResponse(Response response) {
         super(response);
-
     }
 }

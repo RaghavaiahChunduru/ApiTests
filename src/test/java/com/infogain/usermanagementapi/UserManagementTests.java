@@ -1,7 +1,11 @@
 package com.infogain.usermanagementapi;
 
 import static org.apache.http.HttpStatus.*;
+import static com.infogain.enums.Author.RAVI;
+import static com.infogain.enums.Category.REGRESSION;
+import static com.infogain.enums.Service.USER_MANAGEMENT;
 
+import com.infogain.annotations.FrameworkAnnotations;
 import com.infogain.api.usermanagement.User;
 import com.infogain.api.usermanagement.UserManagementAPI;
 import com.infogain.api.usermanagement.UserResponse;
@@ -15,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
+@FrameworkAnnotations(Author = { RAVI }, Category = REGRESSION, Service = USER_MANAGEMENT)
 public class UserManagementTests {
 
   private static final String CREATE_USER_SCHEMA_FILE_PATH = "schemas/create-user-schema.json";
