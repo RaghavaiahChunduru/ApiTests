@@ -21,7 +21,8 @@ public final class MongoDBUtil {
 
   private static final MongoDBUtil instance = new MongoDBUtil();
 
-  private MongoDBUtil() {}
+  private MongoDBUtil() {
+  }
 
   public static MongoDBUtil getInstance() {
     return instance;
@@ -44,8 +45,7 @@ public final class MongoDBUtil {
     Exceptions.wrap(e -> new RuntimeException("Failed to access database: " + dbName, e))
         .run(
             () -> {
-              boolean isDBExists =
-                  mongoClient.listDatabaseNames().into(new ArrayList<>()).contains(dbName);
+              boolean isDBExists = mongoClient.listDatabaseNames().into(new ArrayList<>()).contains(dbName);
               if (!isDBExists) {
                 throw new RuntimeException("Database with name '" + dbName + "' does not exist.");
               }
@@ -60,11 +60,10 @@ public final class MongoDBUtil {
     Exceptions.wrap(e -> new RuntimeException("Failed to access collection: " + collectionName, e))
         .run(
             () -> {
-              boolean isCollectionExists =
-                  mongoDatabase
-                      .listCollectionNames()
-                      .into(new ArrayList<>())
-                      .contains(collectionName);
+              boolean isCollectionExists = mongoDatabase
+                  .listCollectionNames()
+                  .into(new ArrayList<>())
+                  .contains(collectionName);
               if (!isCollectionExists) {
                 throw new RuntimeException(
                     "Collection with name '" + collectionName + "' does not exist.");

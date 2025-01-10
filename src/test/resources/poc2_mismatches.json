@@ -1,0 +1,12 @@
+{
+  "price_per_unit mismatch" : 37697,
+  "product_id mismatch" : 37624,
+  "Rows in sales_fact_1 but missing in sales_fact_2" : 0,
+  "Rows in sales_fact_2 but missing in sales_fact_1" : 15042,
+  "created_at mismatch" : 37543,
+  "sales_date mismatch" : 37434,
+  "updated_at mismatch" : 37422,
+  "customer_id mismatch" : 37442,
+  "quantity mismatch" : 35459,
+  "total_amount mismatch" : 90520
+}

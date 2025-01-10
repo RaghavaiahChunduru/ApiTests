@@ -28,9 +28,9 @@ public class HikariCPExtension implements BeforeAllCallback, AfterAllCallback {
 
         // Load HikariCP configurations
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(CONFIG.getString("DB_URL"));
-        hikariConfig.setUsername(CONFIG.getString("DB_USERNAME"));
-        hikariConfig.setPassword(CONFIG.getString("DB_PASSWORD"));
+        hikariConfig.setJdbcUrl(CONFIG.getString("MYSQL_DB_URL"));
+        hikariConfig.setUsername(CONFIG.getString("MYSQL_DB_USERNAME"));
+        hikariConfig.setPassword(CONFIG.getString("MYSQL_DB_PASSWORD"));
         hikariConfig.setMaximumPoolSize(10);
         hikariConfig.setMinimumIdle(2);
         hikariConfig.setIdleTimeout(30000);

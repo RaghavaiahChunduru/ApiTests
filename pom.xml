@@ -26,6 +26,7 @@
     <hikaricp.version>6.2.1</hikaricp.version>
     <hsqldb.version>2.7.4</hsqldb.version>
     <mysql-connector.version>9.1.0</mysql-connector.version>
+    <redshift-jdbc.version>2.1.0.7</redshift-jdbc.version>
     <maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
   </properties>
@@ -234,6 +235,13 @@
       <artifactId>mysql-connector-j</artifactId>
       <version>${mysql-connector.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.amazon.redshift</groupId>
+      <artifactId>redshift-jdbc42</artifactId>
+      <version>${redshift-jdbc.version}</version>
+    </dependency>
+
 
   </dependencies>
 
