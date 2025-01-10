@@ -1,33 +1,24 @@
 package com.infogain.mysqltoredshift;
 
-import static com.infogain.utils.ConfigUtil.CONFIG;
-import static com.infogain.constants.FrameWorkConstants.getMismatchesJsonPath;
+import static com.infogain.utils.StringUtil.loadQueryFromFile;
+import static com.infogain.constants.FrameWorkConstants.*;
 import static java.util.concurrent.TimeUnit.DAYS;
+import static com.infogain.utils.DBUtil.*;
+import static com.infogain.utils.JsonUtil.writeFromMapToJsonFile;
+import static com.infogain.utils.DateUtil.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
+import com.infogain.utils.FakerUtil;
 import com.machinezoo.noexception.Exceptions;
 import lombok.extern.slf4j.Slf4j;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Slf4j
 public class SimulateRowColumnMismatch {
 
-    private static final String redshiftDbUrl = CONFIG.getString("REDSHIFT_DB_URL");
-    private static final String redshiftUserName = CONFIG.getString("REDSHIFT_DB_USERNAME");
-    private static final String redshiftPassword = CONFIG.getString("REDSHIFT_DB_PASSWORD");
-
-    private static final String mysqlDbUrl = CONFIG.getString("MYSQL_DB_URL");
-    private static final String mysqlUserName = CONFIG.getString("MYSQL_DB_USERNAME");
-    private static final String mysqlPassword = CONFIG.getString("MYSQL_DB_PASSWORD");
-
-    private static final Faker faker = new Faker();
+    private static final Faker faker = FakerUtil.getInstance();
 
     public static void main(String[] args) {
         Exceptions.wrap(e -> new RuntimeException("Failed during database operations", e))
@@ -51,80 +42,10 @@ public class SimulateRowColumnMismatch {
                 });
     }
 
-    private static Connection createRedshiftConnection() {
-        return Exceptions.wrap(e -> new RuntimeException("Failed to connect to Redshift database", e))
-                .get(() -> DriverManager.getConnection(redshiftDbUrl, redshiftUserName, redshiftPassword));
-    }
-
-    private static Connection createMySQLConnection() {
-        return Exceptions.wrap(e -> new RuntimeException("Failed to connect to MySQL database", e))
-                .get(() -> DriverManager.getConnection(mysqlDbUrl, mysqlUserName, mysqlPassword));
-    }
-
     private static void fetchCurrentRowAndColumnMismatches(Connection redshiftConnection) {
-        String query = "" +
-                "SELECT " +
-                "    'Rows in sales_fact_1 but missing in sales_fact_2' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "LEFT JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s2.sales_id IS NULL " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'Rows in sales_fact_2 but missing in sales_fact_1' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_2 s2 " +
-                "LEFT JOIN sales_fact_1 s1 ON s2.sales_id = s1.sales_id " +
-                "WHERE s1.sales_id IS NULL " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'product_id mismatch' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s1.product_id <> s2.product_id " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'customer_id mismatch' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s1.customer_id <> s2.customer_id " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'sales_date mismatch' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s1.sales_date <> s2.sales_date " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'quantity mismatch' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s1.quantity <> s2.quantity " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'price_per_unit mismatch' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s1.price_per_unit <> s2.price_per_unit " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'total_amount mismatch' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s1.total_amount <> s2.total_amount " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'created_at mismatch' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s1.created_at <> s2.created_at " +
-                "UNION ALL " +
-                "SELECT " +
-                "    'updated_at mismatch' AS mismatch_type, COUNT(*) AS mismatch_count " +
-                "FROM sales_fact_1 s1 " +
-                "JOIN sales_fact_2 s2 ON s1.sales_id = s2.sales_id " +
-                "WHERE s1.updated_at <> s2.updated_at;";
+        String query = loadQueryFromFile(getMismatchesQueryPath());
 
         Map<String, Integer> mismatchMap = new HashMap<>();
-
         Exceptions.wrap(e -> new RuntimeException("Error fetching mismatches from Redshift", e))
                 .run(() -> {
                     try (PreparedStatement preparedStatement = redshiftConnection.prepareStatement(query);
@@ -132,23 +53,12 @@ public class SimulateRowColumnMismatch {
                         while (resultSet.next()) {
                             String mismatchType = resultSet.getString("mismatch_type");
                             int mismatchCount = resultSet.getInt("mismatch_count");
-
                             mismatchMap.put(mismatchType, mismatchCount);
                         }
                     }
                 });
-        writeMismatchesToJsonFile(mismatchMap);
-    }
-
-    private static void writeMismatchesToJsonFile(Map<String, Integer> mismatches) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Exceptions.wrap(e -> new RuntimeException("Error writing mismatch data to JSON file", e))
-                .run(() -> {
-                    Path filePath = Paths.get(getMismatchesJsonPath());
-                    Files.createDirectories(filePath.getParent());
-                    objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), mismatches);
-                    log.info("Mismatch data has been written to {}", filePath.toAbsolutePath());
-                });
+        writeFromMapToJsonFile(mismatchMap, getMismatchesJsonPath());
+        log.info("Mismatch data has been written to {}", getMismatchesJsonPath());
     }
 
     private static int getMaxSalesId(Connection mysqlConnection) {
@@ -239,13 +149,5 @@ public class SimulateRowColumnMismatch {
         return String.format(
                 "UPDATE sales_fact_2 SET %s=%s WHERE sales_id=%d;",
                 columnName, formattedValue, salesId);
-    }
-
-    private static String formatDate(java.util.Date date) {
-        return new SimpleDateFormat("yyyy-MM-dd").format(date);
-    }
-
-    private static String formatDateTime(java.util.Date date) {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 }
