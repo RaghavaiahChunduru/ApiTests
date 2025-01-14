@@ -26,6 +26,6 @@ public class ValidArithmeticResponse {
     @JsonSerialize(using = InfinitySerializer.class)
     private Double result;
 
-    private String createdBy;
-    private String createdAt;
+    // private String createdBy;
+    // private String createdAt;
 }

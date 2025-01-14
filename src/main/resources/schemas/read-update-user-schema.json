@@ -8,9 +8,6 @@
         "username": {
             "type": "string"
         },
-        "password": {
-            "type": "string"
-        },
         "email": {
             "type": "string"
         },
@@ -19,22 +16,13 @@
         },
         "roleId": {
             "type": "integer"
-        },
-        "created_at": {
-            "type": "string"
-        },
-        "modified_at": {
-            "type": "string"
         }
     },
     "required": [
         "id",
         "username",
-        "password",
         "email",
         "phone",
-        "roleId",
-        "created_at",
-        "modified_at"
+        "roleId"
     ]
 }

@@ -236,13 +236,12 @@
       <version>${mysql-connector.version}</version>
     </dependency>
 
+    <!--  RedShift JDBC driver -->
     <dependency>
       <groupId>com.amazon.redshift</groupId>
       <artifactId>redshift-jdbc42</artifactId>
       <version>${redshift-jdbc.version}</version>
     </dependency>
-
-
   </dependencies>
 
   <build>

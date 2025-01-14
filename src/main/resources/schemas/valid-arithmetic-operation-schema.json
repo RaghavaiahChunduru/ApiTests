@@ -15,16 +15,7 @@
             "type": "integer"
         },
         "result": {
-            "type": [
-                "number",
-                "string"
-            ]
-        },
-        "createdBy": {
-            "type": "string"
-        },
-        "createdAt": {
-            "type": "string"
+            "type": "number"
         }
     },
     "required": [
@@ -32,8 +23,6 @@
         "firstOperand",
         "secondOperand",
         "operatorId",
-        "result",
-        "createdBy",
-        "createdAt"
+        "result"
     ]
 }

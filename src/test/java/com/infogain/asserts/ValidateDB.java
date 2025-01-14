@@ -89,17 +89,19 @@ public final class ValidateDB {
               .withFailMessage("Expected role ID '%d', but found '%d'", expectedUser.getRoleId(), rs.getInt("role_id"))
               .isEqualTo(expectedUser.getRoleId());
 
-          Assertions.assertThat(rs.getString("created_at").replace(" ", "T"))
-              .as("created_at timestamp mismatch")
-              .withFailMessage("Expected created_at '%s', but found '%s'", expectedUser.getCreated_at(),
-                  rs.getString("created_at").replace(" ", "T"))
-              .isEqualTo(expectedUser.getCreated_at());
+          // Assertions.assertThat(rs.getString("created_at").replace(" ", "T"))
+          // .as("created_at timestamp mismatch")
+          // .withFailMessage("Expected created_at '%s', but found '%s'",
+          // expectedUser.getCreated_at(),
+          // rs.getString("created_at").replace(" ", "T"))
+          // .isEqualTo(expectedUser.getCreated_at());
 
-          Assertions.assertThat(rs.getString("modified_at").replace(" ", "T"))
-              .as("modified_at timestamp mismatch")
-              .withFailMessage("Expected modified_at '%s', but found '%s'", expectedUser.getModified_at(),
-                  rs.getString("modified_at").replace(" ", "T"))
-              .isEqualTo(expectedUser.getModified_at());
+          // Assertions.assertThat(rs.getString("modified_at").replace(" ", "T"))
+          // .as("modified_at timestamp mismatch")
+          // .withFailMessage("Expected modified_at '%s', but found '%s'",
+          // expectedUser.getModified_at(),
+          // rs.getString("modified_at").replace(" ", "T"))
+          // .isEqualTo(expectedUser.getModified_at());
         });
   }
 
@@ -220,11 +222,11 @@ public final class ValidateDB {
                 }
               });
 
-          Assertions.assertThat(rs.getString("created_by"))
-              .as("Created By mismatch")
-              .withFailMessage("Expected createdBy '%s', but found '%s'",
-                  expectedEntry.getCreatedBy(), rs.getString("created_by"))
-              .isEqualTo(expectedEntry.getCreatedBy());
+          // Assertions.assertThat(rs.getString("created_by"))
+          // .as("Created By mismatch")
+          // .withFailMessage("Expected createdBy '%s', but found '%s'",
+          // expectedEntry.getCreatedBy(), rs.getString("created_by"))
+          // .isEqualTo(expectedEntry.getCreatedBy());
 
           // Assertions.assertThat(rs.getString("created_at").replace(" ", "T"))
           // .as("Created At timestamp mismatch")

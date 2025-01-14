@@ -21,10 +21,10 @@ public class UserResponse {
   @JsonAlias("username")
   private String userName;
 
-  private String password;
+  // private String password;
   private String email;
   private String phone;
   private int roleId;
-  private String created_at;
-  private String modified_at;
+  // private String created_at;
+  // private String modified_at;
 }
