@@ -32,7 +32,7 @@ public class User {
         .setPassword(faker.internet().password(8, 16))
         .setEmail(faker.internet().emailAddress())
         .setPhone(String.format("%010d", faker.number().randomNumber(10, true)))
-        .setRoleId(faker.number().numberBetween(1, 5))
+        .setRoleId(faker.number().numberBetween(1, 9))
         .build();
 
     log.info("Generated User: {}", user);
