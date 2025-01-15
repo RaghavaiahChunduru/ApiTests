@@ -28,9 +28,9 @@ public class User {
     Faker faker = new Faker();
 
     User user = User.builder()
-        .setUsername(faker.name().username())
-        .setPassword(faker.internet().password(8, 16))
-        .setEmail(faker.internet().emailAddress())
+        .setUsername(faker.regexify("[a-zA-Z]{4,12}"))
+        .setPassword(faker.regexify("[a-zA-Z0-9!@#$%^&*]{8,18}"))
+        .setEmail(faker.lorem().characters(1, 8) + "@gmail.com")
         .setPhone(String.format("%010d", faker.number().randomNumber(10, true)))
         .setRoleId(faker.number().numberBetween(1, 9))
         .build();

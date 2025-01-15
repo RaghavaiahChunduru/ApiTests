@@ -21,7 +21,7 @@ public class UserResponse {
   @JsonAlias("username")
   private String userName;
 
-  // private String password;
+  private String password;
   private String email;
   private String phone;
   private int roleId;
