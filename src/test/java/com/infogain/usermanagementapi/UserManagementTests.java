@@ -32,14 +32,13 @@ public class UserManagementTests {
   private final ValidateDB dbValidator = ValidateDB.getInstance();
 
   @BeforeEach
-  public void setup() throws Exception {
+  public void setup() {
 
     // Arrange: Create a new user instance
     User newUser = User.getInstance();
     user.set(newUser);
 
     Response response = UserManagementAPI.getInstance().newUser(newUser);
-    response.prettyPrint();
 
     // Assert API Response
     VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
@@ -90,7 +89,7 @@ public class UserManagementTests {
 
     // Assert API Response
     VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
-        // .statusCodeIs(SC_OK)
+        .statusCodeIs(SC_OK)
         .responseTimeBelow(2000)
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
         .assertAll();
@@ -112,7 +111,7 @@ public class UserManagementTests {
 
     // Assert API Response
     VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
-        // .statusCodeIs(SC_OK)
+        .statusCodeIs(SC_OK)
         .responseTimeBelow(2000)
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
         .assertAll();

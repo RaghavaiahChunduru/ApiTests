@@ -1,9 +1,12 @@
 operand,expectedStatus,expectedCode,expectedMessage
-5.25,BAD_REQUEST,400,Invalid number format in path variable
--5,NOT_ACCEPTABLE,406,Operand should have proper value 
-abc,BAD_REQUEST,400,Invalid number format in path variable
-@,BAD_REQUEST,400,Invalid number format in path variable
-" ",BAD_REQUEST,400,Value can not be Space
-"",BAD_REQUEST,400,Value can not be Empty
-NaN,NOT_ACCEPTABLE,406,Operand should have proper value
-4.9E-324,NOT_ACCEPTABLE,406,Operand should have proper value
+-5,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+abc,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+@,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+0xA,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+" ",BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+"",BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+NaN,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+4.9E-324,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+2147483647,BAD_REQUEST,400,[Value must be less than or equal to 170]
+5.25,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+10.555,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
