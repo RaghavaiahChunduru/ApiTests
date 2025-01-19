@@ -122,6 +122,7 @@ public abstract class VerifyResponse<SELF_TYPE extends VerifyResponse<SELF_TYPE>
   }
 
   // Return self type
+  @SuppressWarnings("unchecked")
   protected SELF_TYPE selfType() {
     return (SELF_TYPE) this;
   }

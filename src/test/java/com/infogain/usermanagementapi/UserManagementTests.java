@@ -95,7 +95,8 @@ public class UserManagementTests {
         .assertAll();
 
     // Assert Database Entry
-    dbValidator.validateUserInDatabase(expectedUser, userId.get());
+    dbValidator.validateUserInDatabase(expectedUser, userId.get())
+        .validateEntryInEventNotificationTable(expectedUser, userId.get());
   }
 
   @Test
@@ -117,7 +118,8 @@ public class UserManagementTests {
         .assertAll();
 
     // Assert Database Entry
-    dbValidator.validateUserInDatabase(expectedUser, userId.get());
+    dbValidator.validateUserInDatabase(expectedUser, userId.get())
+        .validateEntryInEventNotificationTable(expectedUser, userId.get());
   }
 
   @DisabledTest
@@ -137,7 +139,8 @@ public class UserManagementTests {
         .matchesSchema(READ_UPDATE_USER_SCHEMA_FILE_PATH)
         .assertAll();
 
-    // Assert Database State
-    dbValidator.validateUserInDatabase(expectedUser, userId.get());
+    // Assert Database Entry
+    dbValidator.validateUserInDatabase(expectedUser, userId.get())
+        .validateEntryInEventNotificationTable(expectedUser, userId.get());
   }
 }

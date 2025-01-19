@@ -51,8 +51,9 @@ public class ArithmeticTests {
         .matchesSchema(VALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH)
         .assertAll();
 
-    // Assert Database Entry
-    dbValidator.validateArithmeticOperationEntryInDatabase(expectedEntry, id.get());
+    // Assert Database Entries
+    dbValidator.validateEntryInArithmeticOperationTable(expectedEntry, id.get())
+        .validateEntryInEventNotificationTable(expectedEntry, id.get());
   }
 
   @ParameterizedTest(name = "{index} => firstOperand={0}, secondOperand={1}, expectedStatus={2}, expectedCode={3},expectedMessage={4}")
@@ -99,8 +100,9 @@ public class ArithmeticTests {
         .matchesSchema(VALID_ARITHMETIC_OPERATION_SCHEMA_FILE_PATH)
         .assertAll();
 
-    // Assert Database Entry
-    dbValidator.validateArithmeticOperationEntryInDatabase(expectedEntry, id.get());
+    // Assert Database Entries
+    dbValidator.validateEntryInArithmeticOperationTable(expectedEntry, id.get())
+        .validateEntryInEventNotificationTable(expectedEntry, id.get());
   }
 
   @ParameterizedTest(name = "{index} => firstOperand={0}, secondOperand={1}, expectedStatus={2}, expectedCode={3},expectedMessage={4}")
@@ -146,8 +148,9 @@ public class ArithmeticTests {
         .matchesSchema(VALID_FACTORIAL_OPERATION_SCHEMA_FILE_PATH)
         .assertAll();
 
-    // Assert Database Entry
-    dbValidator.validateArithmeticOperationEntryInDatabase(expectedEntry, id.get());
+    // Assert Database Entries
+    dbValidator.validateEntryInArithmeticOperationTable(expectedEntry, id.get())
+        .validateEntryInEventNotificationTable(expectedEntry, id.get());
   }
 
   @ParameterizedTest(name = "{index} => operand={0}, expectedStatus={1}, expectedCode={2},expectedMessage={3}")

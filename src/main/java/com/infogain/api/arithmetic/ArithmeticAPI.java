@@ -5,7 +5,6 @@ import static io.restassured.RestAssured.given;
 import com.infogain.api.basespec.SpecFactory;
 import com.infogain.report.ExtentLogger;
 import com.infogain.utils.JsonUtil;
-import com.infogain.utils.PayloadUtil;
 import groovy.util.logging.Slf4j;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;

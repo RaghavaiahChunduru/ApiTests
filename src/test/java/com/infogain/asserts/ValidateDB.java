@@ -134,7 +134,7 @@ public final class ValidateDB {
     return this;
   }
 
-  public ValidateDB validateArithmeticOperationEntryInDatabase(ValidArithmeticResponse expectedEntry, Integer id) {
+  public ValidateDB validateEntryInArithmeticOperationTable(ValidArithmeticResponse expectedEntry, Integer id) {
     String query = "SELECT * FROM arithmetic_operation WHERE id = ?";
     validateNonNullAndNonEmpty(id, "ID");
 
@@ -158,6 +158,97 @@ public final class ValidateDB {
           } catch (Exception e) {
             log.error("Error validating arithmetic operation entry in the database", e);
             throw new RuntimeException("Failed to validate arithmetic operation entry in the database", e);
+          }
+        });
+
+    return this;
+  }
+
+  public ValidateDB validateEntryInEventNotificationTable(ValidArithmeticResponse expectedEntry, Integer id) {
+    String expectedMessage = String.format(
+        "ArithmeticOperation(id=%d, firstOperand=%s, secondOperand=%s, operatorId=%d, result=%s)",
+        expectedEntry.getId(),
+        expectedEntry.getFirstOperand(),
+        expectedEntry.getSecondOperand(),
+        expectedEntry.getOperatorId(),
+        expectedEntry.getResult());
+
+    String query = "SELECT message FROM wss_wep_mysqldb.event_notification WHERE data_id = ? and type='arithmetic-operation'";
+    validateNonNullAndNonEmpty(id, "ID");
+
+    Awaitility.await()
+        .atMost(AWAITILITY_TIMEOUT, TimeUnit.SECONDS)
+        .pollInterval(AWAITILITY_POLL_INTERVAL, TimeUnit.SECONDS)
+        .pollDelay(AWAITILITY_POLL_DELAY, TimeUnit.SECONDS)
+        .untilAsserted(() -> {
+          try (Connection connection = getDataSource().getConnection();
+              PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+              if (resultSet.next()) {
+                String actualMessage = resultSet.getString("message");
+
+                if (actualMessage == null || !actualMessage.equals(expectedMessage)) {
+                  throw new RuntimeException("Message mismatch for event notification with id: " + id
+                      + ". Expected: " + expectedMessage + ", Found: " + actualMessage);
+                }
+                log.info("Event notification message validated successfully for id: {}", id);
+              } else {
+                throw new RuntimeException("No event notification found in the database with id: " + id);
+              }
+            }
+          } catch (Exception e) {
+            log.error("Error validating event notification message in the database", e);
+            throw new RuntimeException("Failed to validate event notification message in the database", e);
+          }
+        });
+
+    return this;
+  }
+
+  public ValidateDB validateEntryInEventNotificationTable(UserResponse expectedUser, Long id) {
+    String expectedMessage = String.format(
+        "User(id=%d, username=%s, password=%s, email=%s, phone=%s, roleId=%d)",
+        expectedUser.getId(),
+        expectedUser.getUserName(),
+        expectedUser.getPassword(),
+        expectedUser.getEmail(),
+        expectedUser.getPhone(),
+        expectedUser.getRoleId());
+
+    String query = "SELECT * FROM wss_wep_mysqldb.event_notification " +
+        "WHERE data_id = ? AND type = 'user-management' " +
+        "ORDER BY created_date DESC LIMIT 1;";
+
+    validateNonNullAndNonEmpty(id, "ID");
+
+    Awaitility.await()
+        .atMost(AWAITILITY_TIMEOUT, TimeUnit.SECONDS)
+        .pollInterval(AWAITILITY_POLL_INTERVAL, TimeUnit.SECONDS)
+        .pollDelay(AWAITILITY_POLL_DELAY, TimeUnit.SECONDS)
+        .untilAsserted(() -> {
+          try (Connection connection = getDataSource().getConnection();
+              PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Bind the id to the query
+            statement.setLong(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+              if (resultSet.next()) {
+                String actualMessage = resultSet.getString("message");
+                if (actualMessage == null || !actualMessage.equals(expectedMessage)) {
+                  throw new RuntimeException("Message mismatch for event notification with id: " + id
+                      + ". Expected: " + expectedMessage + ", Found: " + actualMessage);
+                }
+                log.info("Event notification message validated successfully for id: {}", id);
+              } else {
+                throw new RuntimeException("No event notification found in the database with id: " + id);
+              }
+            }
+          } catch (Exception e) {
+            log.error("Error validating event notification message in the database", e);
+            throw new RuntimeException("Failed to validate event notification message in the database", e);
           }
         });
 
