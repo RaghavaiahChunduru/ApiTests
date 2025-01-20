@@ -25,6 +25,7 @@ public class UserManagementTests {
 
   private static final String CREATE_USER_SCHEMA_FILE_PATH = "schemas/create-user-schema.json";
   private static final String READ_UPDATE_USER_SCHEMA_FILE_PATH = "schemas/read-update-user-schema.json";
+  private static final String INVALID_USER_SCHEMA_FILE_PATH = "schemas/invalid-user-schema.json";
 
   private ThreadLocal<Long> userId = new ThreadLocal<>();
   private ThreadLocal<User> user = new ThreadLocal<>();
@@ -38,6 +39,7 @@ public class UserManagementTests {
     User newUser = User.getInstance();
     user.set(newUser);
 
+    // Act
     Response response = UserManagementAPI.getInstance().newUser(newUser);
 
     // Assert API Response
@@ -70,8 +72,6 @@ public class UserManagementTests {
 
       // Assert Database Entry
       dbValidator.validateUserNotInDatabase(userId.get());
-
-      log.info("User with ID: {} deleted successfully", userId.get());
 
       userId.remove();
       user.remove();
@@ -142,5 +142,27 @@ public class UserManagementTests {
     // Assert Database Entry
     dbValidator.validateUserInDatabase(expectedUser, userId.get())
         .validateEntryInEventNotificationTable(expectedUser, userId.get());
+  }
+
+  @Test
+  void assertValidationsForInvalidInputsInUserCreation() {
+    // Arrange: Create a new user instance
+    User newUser = User.getInstance();
+    newUser.setUsername("a").setPassword("p").setEmail("e").setPhone("123");
+    log.info("Updated user with invalid inputs {}", newUser.toString());
+
+    // Act
+    Response response = UserManagementAPI.getInstance().newUser(newUser);
+    ExtentLogger.logResponse(response);
+
+    // Assert API Response
+    VerifyUserResponse.assertThat(response, VerifyUserResponse.class)
+        .statusCodeIs(SC_BAD_REQUEST)
+        .responseTimeBelow(5000)
+        .hasKeyWithValue("message",
+            "{password=size must be between 8 and 18, phone=The phone number must have 10 digits, email=The length of email should be 5 to 24 characters, username=size must be between 4 and 12}")
+        .matchesSchema(INVALID_USER_SCHEMA_FILE_PATH)
+        .assertAll();
+
   }
 }

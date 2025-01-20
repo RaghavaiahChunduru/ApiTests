@@ -1,2 +1,3 @@
 com.infogain.extensions.ReportingExtension
 com.infogain.extensions.HikariCPExtension
+com.infogain.extensions.FilterTestsExtension
