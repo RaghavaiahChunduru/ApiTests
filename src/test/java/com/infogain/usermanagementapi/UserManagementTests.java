@@ -148,7 +148,7 @@ public class UserManagementTests {
   void assertValidationsForInvalidInputsInUserCreation() {
     // Arrange: Create a new user instance
     User newUser = User.getInstance();
-    newUser.setUsername("a").setPassword("p").setEmail("e").setPhone("123");
+    newUser.setUsername("a").setPassword("p").setEmail("e@g").setPhone("123");
     log.info("Updated user with invalid inputs {}", newUser.toString());
 
     // Act
