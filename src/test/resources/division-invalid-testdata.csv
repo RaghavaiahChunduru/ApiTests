@@ -1,19 +1,19 @@
 firstOperand,secondOperand,expectedStatus,expectedCode,expectedMessage
-5,0,NOT_ACCEPTABLE,406,Zero as Divisor is not allowed
-" ",5,BAD_REQUEST,400,{firstOperand=First operand must not be null}
-5," ",BAD_REQUEST,400,{secondOperand=Second operand must not be null}
-"",5,BAD_REQUEST,400,{firstOperand=First operand must not be null}
-5,"",BAD_REQUEST,400,{secondOperand=Second operand must not be null}
-,,BAD_REQUEST,400,"{firstOperand=First operand must not be null, secondOperand=Second operand must not be null}"
-5,aaa,BAD_REQUEST,400,Request body is missing or invalid
-abc,5,BAD_REQUEST,400,Request body is missing or invalid
-sss,qqq,BAD_REQUEST,400,Request body is missing or invalid
-@,5,BAD_REQUEST,400,Request body is missing or invalid
-5,*,BAD_REQUEST,400,Request body is missing or invalid
--,$,BAD_REQUEST,400,Request body is missing or invalid
-1.7976931348623157E308,1e-10,NOT_ACCEPTABLE,406,Result exceeds the permissible limits
--1.7976931348623157E308,1e-10,NOT_ACCEPTABLE,406,Result exceeds the permissible limits
-1,4.9E-324,NOT_ACCEPTABLE,406,Result exceeds the permissible limits
+5,0,Not Acceptable,406,Zero as Divisor is not allowed
+" ",5,Bad Request,400,{firstOperand=First operand must not be null}
+5," ",Bad Request,400,{secondOperand=Second operand must not be null}
+"",5,Bad Request,400,{firstOperand=First operand must not be null}
+5,"",Bad Request,400,{secondOperand=Second operand must not be null}
+,,Bad Request,400,"{firstOperand=First operand must not be null, secondOperand=Second operand must not be null}"
+5,aaa,Bad Request,400,Request body is missing or invalid
+abc,5,Bad Request,400,Request body is missing or invalid
+sss,qqq,Bad Request,400,Request body is missing or invalid
+@,5,Bad Request,400,Request body is missing or invalid
+5,*,Bad Request,400,Request body is missing or invalid
+-,$,Bad Request,400,Request body is missing or invalid
+1.7976931348623157E308,1e-10,Not Acceptable,406,Result exceeds the permissible limits
+-1.7976931348623157E308,1e-10,Not Acceptable,406,Result exceeds the permissible limits
+1,4.9E-324,Not Acceptable,406,Result exceeds the permissible limits
 
 
 

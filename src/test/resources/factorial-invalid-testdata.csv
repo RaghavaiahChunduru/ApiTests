@@ -1,12 +1,12 @@
 operand,expectedStatus,expectedCode,expectedMessage
--5,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-abc,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-@,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-0xA,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-" ",BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-"",BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-NaN,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-4.9E-324,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-2147483647,BAD_REQUEST,400,[Value must be less than or equal to 170]
-5.25,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
-10.555,BAD_REQUEST,400,"Value can not be Empty, Null or Invalid Format"
+-5,Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+abc,Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+@,Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+0xA,Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+" ",Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+"",Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+NaN,Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+4.9E-324,Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+2147483647,Bad Request,400,[Value must be less than or equal to 170]
+5.25,Bad Request,400,"Value can not be Empty, Null or Invalid Format"
+10.555,Bad Request,400,"Value can not be Empty, Null or Invalid Format"

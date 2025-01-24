@@ -1,7 +1,7 @@
 firstOperand,secondOperand,expectedStatus,expectedCode,expectedMessage
-a,b,BAD_REQUEST,400,Request body is missing or invalid
-5," ",BAD_REQUEST,400,"{secondOperand=Second operand must not be null}"
-" ",5,BAD_REQUEST,400,"{firstOperand=First operand must not be null}"
-,5,BAD_REQUEST,400,"{firstOperand=First operand must not be null}"
-"","",BAD_REQUEST,400,"{firstOperand=First operand must not be null, secondOperand=Second operand must not be null}"
-,,BAD_REQUEST,400,"{firstOperand=First operand must not be null, secondOperand=Second operand must not be null}"
+a,b,Bad Request,400,Request body is missing or invalid
+5," ",Bad Request,400,"{secondOperand=Second operand must not be null}"
+" ",5,Bad Request,400,"{firstOperand=First operand must not be null}"
+,5,Bad Request,400,"{firstOperand=First operand must not be null}"
+"","",Bad Request,400,"{firstOperand=First operand must not be null, secondOperand=Second operand must not be null}"
+,,Bad Request,400,"{firstOperand=First operand must not be null, secondOperand=Second operand must not be null}"
